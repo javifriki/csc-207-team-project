@@ -1,4 +1,4 @@
-package interface_adaptor.use_case;
+package use_case.account;
 
 import entity.Account;
 

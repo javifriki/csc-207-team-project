@@ -1,7 +1,7 @@
 package data_access;
 
 import entity.Account;
-import interface_adaptor.use_case.AccountDataAccessInterface;
+import use_case.account.AccountDataAccessInterface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
