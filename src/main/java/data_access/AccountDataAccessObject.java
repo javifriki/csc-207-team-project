@@ -126,13 +126,48 @@ public class AccountDataAccessObject implements AccountDataAccessInterface {
 
     // Save a single newly added account into JSON file
     private void saveAccountData() {
+        JSONObject baseRoot = new JSONObject();
+        for (String accountNumberKey : this.accountNumberToAccount.keySet()) {
+            Account account = this.accountNumberToAccount.get(accountNumberKey);
+            Account.AccountType accountType = account.getAccountType();
+            List<Transaction> transactionList = account.getAccountTransactions();
+            double accountBalance = account.getAccountBalance();
 
+            JSONObject accountObj = new JSONObject();
+            accountObj.put("accountType", accountType);
+            accountObj.put("balance", accountBalance);
+
+            JSONArray transactionsJSONArr = new JSONArray();
+            for (Transaction transaction : transactionList) {
+                double transactionAmount = transaction.getTransactionAmount();
+                String transactionType = transaction.getTransactionType().toString();
+                String transactionCategory = transaction.getTransactionCategory().toString();
+                String transactionDate = transaction.getTransactionCategory().toString();
+
+                JSONObject transactionObj = new JSONObject();
+                transactionObj.put("amount", transactionAmount);
+                transactionObj.put("transactionType", transactionType);
+                transactionObj.put("transactionCategory", transactionCategory);
+                transactionObj.put("date", transactionDate);
+
+                transactionsJSONArr.put(transactionObj);
+            }
+
+            accountObj.put("transactionList", transactionsJSONArr);
+
+            baseRoot.put(accountNumberKey, accountObj);
+        }
     }
 
+    // Adds a new Account
     @Override
     public void saveAccount(Account account) {
-        this.accountNumberToAccount.put(account.getAccountNumber(), account);
-        // saveAccountData()
+        if (!accountNumberToAccount.containsKey(account.getAccountNumber())) {
+            // TODO
+        } else {
+            this.accountNumberToAccount.put(account.getAccountNumber(), account);
+            this.saveAccountData();
+        }
     }
 
     @Override
