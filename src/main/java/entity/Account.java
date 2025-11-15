@@ -14,12 +14,14 @@ public class Account {
     private final String accountNumber;
     private final AccountType type;
     private final List<Transaction> transactions;
+    private final List<AssetAndLiability> assetAndLiabilities;
     private double balance;
 
     public Account(String accountNumber, AccountType type, double balance) {
         this.accountNumber = accountNumber;
         this.type = type;
         this.transactions = new ArrayList<>();
+        this.assetAndLiabilities = new ArrayList<>();
         this.balance = balance;
     }
 
@@ -35,6 +37,10 @@ public class Account {
         return this.transactions;
     }
 
+    public List<AssetAndLiability> getAccountAssetAndLiabilities() {
+        return assetAndLiabilities;
+    }
+
     public double getAccountBalance() {
         return this.balance;
     }
@@ -47,5 +53,9 @@ public class Account {
         }
 
         this.transactions.add(transaction); // Add the Transaction to this Account
+    }
+
+    public void applyAssetAndLiability(AssetAndLiability assetAndLiability) {
+        this.assetAndLiabilities.add(assetAndLiability);
     }
 }
