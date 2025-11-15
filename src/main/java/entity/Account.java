@@ -17,11 +17,11 @@ public class Account {
     private final List<AssetAndLiability> assetAndLiabilities;
     private double balance;
 
-    public Account(String accountNumber, AccountType type, double balance) {
+    public Account(String accountNumber, AccountType type, List<Transaction> transactions, double balance) {
         this.accountNumber = accountNumber;
         this.type = type;
-        this.transactions = new ArrayList<>();
         this.assetAndLiabilities = new ArrayList<>();
+        this.transactions = transactions;
         this.balance = balance;
     }
 
