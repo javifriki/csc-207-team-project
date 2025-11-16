@@ -46,10 +46,9 @@ public class AddTransactionInteractor implements AddTransactionInputBoundary {
         accountDataAccessObject.saveAccount(account); // persist the updated account after transaction occurred
 
         final AddTransactionOutputData addTransactionOutputData = new AddTransactionOutputData(
-                "successful",
                 accountNumber,
                 transactionAmount,
-                account.getAccountBalance()
+                transaction
         );
 
         addTransactionPresenter.prepareTransactionSuccessView(addTransactionOutputData);

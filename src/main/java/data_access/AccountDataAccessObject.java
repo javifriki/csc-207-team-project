@@ -36,6 +36,8 @@ public class AccountDataAccessObject implements AccountDataAccessInterface {
         for (Transaction.TransactionCategory type : Transaction.TransactionCategory.values()) {
             transactionCategoryHashMap.put(type.toString(), type);
         }
+
+        loadAllAccountData();
     }
 
     // JSON Structure
