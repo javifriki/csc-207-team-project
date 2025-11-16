@@ -8,4 +8,6 @@ public interface AccountDataAccessInterface {
     void saveAccount(Account account);
     Account getAccount(String accountNumber);
     List<Account> getAllAccounts();
+
+    void deleteAccount(String accountNumber);
 }

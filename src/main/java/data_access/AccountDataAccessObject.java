@@ -36,6 +36,8 @@ public class AccountDataAccessObject implements AccountDataAccessInterface {
         for (Transaction.TransactionCategory type : Transaction.TransactionCategory.values()) {
             transactionCategoryHashMap.put(type.toString(), type);
         }
+
+        this.loadAllAccountData();
     }
 
     // JSON Structure
@@ -157,17 +159,21 @@ public class AccountDataAccessObject implements AccountDataAccessInterface {
 
             baseRoot.put(accountNumberKey, accountObj);
         }
+        try {
+            Files.writeString(Path.of(this.filename), baseRoot.toString(4));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to Write Account Data JSON file");
+        }
     }
 
     // Adds a new Account
     @Override
     public void saveAccount(Account account) {
-        if (!accountNumberToAccount.containsKey(account.getAccountNumber())) {
-            // TODO
-        } else {
-            this.accountNumberToAccount.put(account.getAccountNumber(), account);
-            this.saveAccountData();
-        }
+        // Simply put the account in the map (will add new or replace existing)
+        this.accountNumberToAccount.put(account.getAccountNumber(), account);
+
+        // Save ALL accounts to the JSON file
+        this.saveAccountData();
     }
 
     @Override
@@ -178,5 +184,13 @@ public class AccountDataAccessObject implements AccountDataAccessInterface {
     @Override
     public List<Account> getAllAccounts() {
         return new ArrayList<>(accountNumberToAccount.values());
+    }
+
+    @Override
+    public void deleteAccount(String accountNumber) {
+        if (this.accountNumberToAccount.containsKey(accountNumber)) {
+            this.accountNumberToAccount.remove(accountNumber);
+            this.saveAccountData(); // Saving changes to file
+        }
     }
 }
