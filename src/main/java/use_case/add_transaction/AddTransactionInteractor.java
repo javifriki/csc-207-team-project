@@ -3,15 +3,16 @@ package use_case.add_transaction;
 import data_access.AccountDataAccessObject;
 import entity.Account;
 import entity.Transaction;
+import use_case.account.AccountDataAccessInterface;
 
 import java.time.LocalDate;
 
 public class AddTransactionInteractor implements AddTransactionInputBoundary {
 
-    private final AccountDataAccessObject accountDataAccessObject;
+    private final AccountDataAccessInterface accountDataAccessObject;
     private final AddTransactionOutputBoundary addTransactionPresenter;
 
-    public AddTransactionInteractor (AccountDataAccessObject accountDataAccessObject, AddTransactionOutputBoundary addTransactionPresenter) {
+    public AddTransactionInteractor (AccountDataAccessInterface accountDataAccessObject, AddTransactionOutputBoundary addTransactionPresenter) {
         this.accountDataAccessObject = accountDataAccessObject;
         this.addTransactionPresenter = addTransactionPresenter;
     }
@@ -47,7 +48,7 @@ public class AddTransactionInteractor implements AddTransactionInputBoundary {
 
         final AddTransactionOutputData addTransactionOutputData = new AddTransactionOutputData(
                 accountNumber,
-                transactionAmount,
+                account.getAccountBalance(),
                 transaction
         );
 
