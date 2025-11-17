@@ -1,18 +1,17 @@
 package use_case.add_asset_and_liability;
 
-import data_access.AccountDataAccessObject;
-import entity.Account;
+import data_access.AssetAndLiabilityDataAccessObject;
 import entity.AssetAndLiability;
 
 import java.time.LocalDate;
 
 public class AddAssetAndLiabilityInteractor implements AddAssetAndLiabilityInputBoundary {
 
-    private final AccountDataAccessObject accountDataAccessObject;
+    private final AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject;
     // presenter
 
-    public AddAssetAndLiabilityInteractor (AccountDataAccessObject accountDataAccessObject) {
-        this.accountDataAccessObject = accountDataAccessObject;
+    public AddAssetAndLiabilityInteractor (AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject) {
+        this.assetAndLiabilityDataAccessObject = assetAndLiabilityDataAccessObject;
     }
 
     @Override
@@ -23,28 +22,29 @@ public class AddAssetAndLiabilityInteractor implements AddAssetAndLiabilityInput
         final String assetAndLiabilityID = addAssetAndLiabilityInputData.getID();
         final LocalDate dateCreated = addAssetAndLiabilityInputData.getDateCreated();
         final double interestRate =  addAssetAndLiabilityInputData.getInterestRate();
+        final AssetAndLiability.RatePeriod assetAndLiabilityRatePeriod = addAssetAndLiabilityInputData.getRatePeriod();
 
-//        if (account == null) {
-//            // account does not exist
-//        } else {
-            AssetAndLiability assetAndLiability = new AssetAndLiability( // Ben: should implement Builder design pattern in the future
-                    assetAndLiabilityName,
-                    assetAndLiabilityType,
-                    assetAndLiabilityAmount,
-                    assetAndLiabilityID,
-                    dateCreated,
-                    interestRate
-            );
+        AssetAndLiability assetAndLiability = new AssetAndLiability( // Ben: should implement Builder design pattern in the future
+                assetAndLiabilityName,
+                assetAndLiabilityType,
+                assetAndLiabilityRatePeriod,
+                assetAndLiabilityAmount,
+                assetAndLiabilityID,
+                dateCreated,
+                interestRate
+        );
 
-            final AddAssetAndLiabilityOutputData addAssetAndLiabilityOutputData = new AddAssetAndLiabilityOutputData(
-                    "successful",
-                    assetAndLiabilityType,
-                    assetAndLiabilityAmount,
-                    interestRate
-            );
+        assetAndLiabilityDataAccessObject.saveAssetAndLiability(assetAndLiability);
 
-            // presenter call
-//        }
+        final AddAssetAndLiabilityOutputData addAssetAndLiabilityOutputData = new AddAssetAndLiabilityOutputData(
+                "successful",
+                assetAndLiabilityType,
+                assetAndLiabilityAmount,
+                interestRate,
+                assetAndLiabilityRatePeriod
+        );
+
+        // presenter call
 
     }
 }

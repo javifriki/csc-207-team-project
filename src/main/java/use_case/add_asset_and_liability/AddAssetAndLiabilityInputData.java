@@ -11,15 +11,18 @@ public class AddAssetAndLiabilityInputData {
     private final LocalDate dateCreated;
     private final double amount;
     private final double interestRate;
+    private final AssetAndLiability.RatePeriod ratePeriod;
 
     public AddAssetAndLiabilityInputData(String name, AssetAndLiability.Type type, String ID,
-                                         LocalDate dateCreated, double amount, double interestRate) {
+                                         LocalDate dateCreated, double amount, double interestRate,
+                                         AssetAndLiability.RatePeriod ratePeriod) {
         this.name = name;
         this.type = type;
         this.amount = amount;
         this.dateCreated = dateCreated;
         this.ID = ID;
         this.interestRate = interestRate;
+        this.ratePeriod = ratePeriod;
     }
 
     // Getters
@@ -36,5 +39,9 @@ public class AddAssetAndLiabilityInputData {
 
     public LocalDate getDateCreated() {
         return dateCreated;
+    }
+
+    public AssetAndLiability.RatePeriod getRatePeriod() {
+        return ratePeriod;
     }
 }
