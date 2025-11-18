@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +22,7 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
     // Temporary Storage DAO, can incorporate persistent storage later by storing ALL ACCOUNT class fields in JSON
     private Map<String, AssetAndLiability> assetAndLiabilityIDToAssetAndLiability = new HashMap<>();
     private Map<String, AssetAndLiability.Type> assetAndLiabilityTypeHashMap = new HashMap<>();
+    private Map<String, AssetAndLiability.RatePeriod> assetAndLiabilityRatePeriodHashMap = new HashMap<>();
     private String filename;
 
     public AssetAndLiabilityDataAccessObject(String filename) {
@@ -31,25 +31,33 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
         for (AssetAndLiability.Type type : AssetAndLiability.Type.values()) {
             assetAndLiabilityTypeHashMap.put(type.toString(), type);
         }
+
+        for (AssetAndLiability.RatePeriod ratePeriod : AssetAndLiability.RatePeriod.values()) {
+            assetAndLiabilityRatePeriodHashMap.put(ratePeriod.toString(), ratePeriod);
+        }
+
+        loadAllAccountData();
     }
 
     /*
-    "assetAndLiabilityList": [
+    {
         "A0001": {
             "name": "Housing",
             "type": ASSET,
             "amount": 200000.0,
             "date": "2025-10-01",
-            "interestRate": 0.02
+            "interestRate": 0.02,
+            "ratePeriod": ANNUALLY
         },
         "L0002": {
             "name": "Student Loan",
             "type": LIABILITY,
             "amount": 100000000000000.0,
             "date": "2025-10-09",
-            "interestRate": 0.10
+            "interestRate": 0.10,
+            "ratePeriod": MONTHLY
         }
-    ]
+    }
     */
 
     private void loadAllAccountData() {
@@ -65,13 +73,16 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
                 AssetAndLiability.Type type = this.assetAndLiabilityTypeHashMap.
                         get(assetAndLiabilityObj.getString("type"));
 
+                AssetAndLiability.RatePeriod ratePeriod = this.assetAndLiabilityRatePeriodHashMap.
+                        get(assetAndLiabilityObj.getString("ratePeriod"));
+
                 double amount = assetAndLiabilityObj.getDouble("amount");
 
                 LocalDate date = LocalDate.parse(assetAndLiabilityObj.getString("date"));
 
                 double interestRate = assetAndLiabilityObj.getDouble("interestRate");
 
-                AssetAndLiability assetAndLiability = new AssetAndLiability(name, type,
+                AssetAndLiability assetAndLiability = new AssetAndLiability(name, type, ratePeriod,
                         amount, IDKey, date, interestRate);
                 this.assetAndLiabilityIDToAssetAndLiability.put(IDKey, assetAndLiability);
             }
@@ -80,37 +91,40 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
         }
     }
 
-    // Save a single newly added asset/liability into JSON file
+    // Save all added assets/liabilities into JSON file
     private void saveAssetAndLiabilityData() {
         JSONObject baseRoot = new JSONObject();
-        for (String IDKey : this.assetAndLiabilityIDToAssetAndLiability.keySet()) {
-            AssetAndLiability assetAndLiability = this.assetAndLiabilityIDToAssetAndLiability.get(IDKey);
-            String name = assetAndLiability.getName();
-            double amount = assetAndLiability.getAmount();
-            AssetAndLiability.Type type = assetAndLiability.getType();
-            String dateCreated = assetAndLiability.getDateCreated().toString();
-            double interestRate = assetAndLiability.getInterestRate();
+        try {
+            for (String IDKey : this.assetAndLiabilityIDToAssetAndLiability.keySet()) {
+                AssetAndLiability assetAndLiability = this.assetAndLiabilityIDToAssetAndLiability.get(IDKey);
+                String name = assetAndLiability.getName();
+                double amount = assetAndLiability.getAmount();
+                AssetAndLiability.Type type = assetAndLiability.getType();
+                AssetAndLiability.RatePeriod ratePeriod = assetAndLiability.getRatePeriod();
+                String dateCreated = assetAndLiability.getDateCreated().toString();
+                double interestRate = assetAndLiability.getInterestRate();
 
-            JSONObject assetAndLiabilityObj = new JSONObject();
-            assetAndLiabilityObj.put("name", name);
-            assetAndLiabilityObj.put("type", type);
-            assetAndLiabilityObj.put("amount", amount);
-            assetAndLiabilityObj.put("dateCreated", dateCreated);
-            assetAndLiabilityObj.put("interestRate", interestRate);
+                JSONObject assetAndLiabilityObj = new JSONObject();
+                assetAndLiabilityObj.put("name", name);
+                assetAndLiabilityObj.put("type", type);
+                assetAndLiabilityObj.put("ratePeriod", ratePeriod);
+                assetAndLiabilityObj.put("amount", amount);
+                assetAndLiabilityObj.put("dateCreated", dateCreated);
+                assetAndLiabilityObj.put("interestRate", interestRate);
 
-            baseRoot.put(IDKey, assetAndLiabilityObj);
+                baseRoot.put(IDKey, assetAndLiabilityObj);
+            }
+            Files.writeString(Path.of(this.filename), baseRoot.toString(2));
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write Asset/Liability Data to the JSON file");
         }
     }
 
     // Adds a new Account
     @Override
     public void saveAssetAndLiability(AssetAndLiability assetAndLiability) {
-        if (!assetAndLiabilityIDToAssetAndLiability.containsKey(assetAndLiability.getID())) {
-            // TODO
-        } else {
-            this.assetAndLiabilityIDToAssetAndLiability.put(assetAndLiability.getID(), assetAndLiability);
-            this.saveAssetAndLiabilityData();
-        }
+        this.assetAndLiabilityIDToAssetAndLiability.put(assetAndLiability.getID(), assetAndLiability);
+        this.saveAssetAndLiabilityData();
     }
 
     @Override

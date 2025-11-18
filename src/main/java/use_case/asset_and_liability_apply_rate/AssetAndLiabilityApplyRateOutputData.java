@@ -1,22 +1,29 @@
-package use_case.add_asset_and_liability;
+package use_case.asset_and_liability_apply_rate;
 
 import entity.AssetAndLiability;
 
-public class AddAssetAndLiabilityOutputData {
+import java.time.LocalDate;
+
+public class AssetAndLiabilityApplyRateOutputData {
     private String message;
     private AssetAndLiability.Type type;
     private double assetAndLiabilityAmount;
+    private LocalDate dateUpdated;
+    private LocalDate endDate;
     private double interestRate;
     private AssetAndLiability.RatePeriod ratePeriod;
 
     // Transaction of $amount added successfully to $accountNumber. New balance is $newBalance. Additional messages: $message
 
-    public AddAssetAndLiabilityOutputData(String message, AssetAndLiability.Type type,
-                                          double assetAndLiabilityAmount, double interestRate,
-                                          AssetAndLiability.RatePeriod ratePeriod) {
+    public AssetAndLiabilityApplyRateOutputData(String message, AssetAndLiability.Type type,
+                                                double assetAndLiabilityAmount, LocalDate dateUpdated,
+                                                LocalDate endDate, double interestRate,
+                                                AssetAndLiability.RatePeriod ratePeriod) {
         this.message = message;
         this.type = type;
         this.assetAndLiabilityAmount = assetAndLiabilityAmount;
+        this.dateUpdated = dateUpdated;
+        this.endDate = endDate;
         this.interestRate = interestRate;
         this.ratePeriod = ratePeriod;
     }
@@ -39,5 +46,13 @@ public class AddAssetAndLiabilityOutputData {
 
     public AssetAndLiability.RatePeriod getRatePeriod() {
         return ratePeriod;
+    }
+
+    public LocalDate getDateUpdated() {
+        return dateUpdated;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
     }
 }
