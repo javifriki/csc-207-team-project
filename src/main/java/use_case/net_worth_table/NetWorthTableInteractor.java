@@ -1,8 +1,6 @@
 package use_case.net_worth_table;
 
-import data_access.AccountDataAccessObject;
 import data_access.AssetAndLiabilityDataAccessObject;
-import entity.Account;
 import entity.AssetAndLiability;
 
 import java.util.ArrayList;
@@ -10,21 +8,38 @@ import java.util.List;
 
 public class NetWorthTableInteractor implements  NetWorthTableInputBoundary {
     private final AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject;
+    private final NetWorthTableOutputBoundary presenter;
 
-    public NetWorthTableInteractor (AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject) {
+    public NetWorthTableInteractor (AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject,
+                                    NetWorthTableOutputBoundary presenter) {
         this.assetAndLiabilityDataAccessObject = assetAndLiabilityDataAccessObject;
+        this.presenter = presenter;
     }
 
     @Override
     public void execute(NetWorthTableInputData netWorthTableInputData) {
-        List<Account> capital = assetAndLiabilityDataAccessObject.getAllAccounts();
+        List<AssetAndLiability> capitals = assetAndLiabilityDataAccessObject.getAllAssetAndLiabilities();
         double totalAssets = 0.0;
         double totalLiabilities = 0.0;
         List<AssetAndLiability> allAssets = new ArrayList<>();
         List<AssetAndLiability> allLiabilities = new ArrayList<>();
 
-        //sort assests and liabilities into separate arrays
-        //get the total somehow ??? look at entity methods
+        if (capitals != null) {
+            for (AssetAndLiability capital : capitals) {
+                switch (capital.getType()) {
+                    case ASSET:
+                        allAssets.add(capital);
+                        totalAssets += capital.getAmount();
+                        break;
+                    case LIABILITY:
+                        allLiabilities.add(capital);
+                        totalLiabilities += capital.getAmount();
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Invalid capital type");
+                }
+            }
+        }
 
         NetWorthTableOutputData outputData = new NetWorthTableOutputData(
                 allAssets,
@@ -33,7 +48,6 @@ public class NetWorthTableInteractor implements  NetWorthTableInputBoundary {
                 totalLiabilities
         );
 
+        presenter.present(outputData);
     }
-
-    //presnt
 }
