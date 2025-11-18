@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 
 import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,149 +17,106 @@ import use_case.account.AccountDataAccessInterface;
 import data_access.AccountDataAccessObject;
 
 public class MonthlyReportState {
-    private String year;
-    private String month;
-
-    // line graph
-    private List<String> dates;
-    private List<Double> balances;
-    private Map<String, Double> lineGraph;
-
-    // pie chart
-    private List<String> labels;
-    private List<Double> values;
-    private Map<String, Double> pieChart;
 
 
-    public String getYear() {
-        return year;
-    }
-    public String getMonth() {
-        return month;
-    }
-    public void setYear(String year) {
-        this.year = year;
-    }
-    public void setMonth(String month) {
-        this.month = month;
+    JSONObject yearTransactions = new JSONObject();
+
+    private static final List<String> pie_chart_categories = List.of(
+            "DINING",
+            "GROCERIES",
+            "RENT",
+            "UTILITIES",
+            "ENTERTAINMENT",
+            "TRANSPORTATION",
+            "MORTGAGE",
+            "HEALTHCARE"
+    );
+
+    public static class currentDate {
+        static LocalDate today = LocalDate.now();
+        static int currentYear = today.getYear();
+        static int currentMonth = today.getMonthValue();
+        static int currentDay = today.getDayOfMonth();
     }
 
-    public void loadData(AccountDataAccessInterface accountDataAccessInterface)  {
+    public class getAllData {
+        return JSONObject yearTransactions;
+    }
+
+    public class getYearData(int year) {
+        String str_year = String.valueOf(year);
+        return yearTransactions.getJSONObject(str_year);
+    }
+
+
+
+    public void initData(AccountDataAccessInterface accountDataAccessInterface) {
+
+        String yearKey = String.valueOf(currentDate.currentYear);
+
+        JSONObject yearObj = yearTransactions.optJSONObject(yearKey);
+        if (yearObj == null) {
+            yearObj = new JSONObject();
+            yearTransactions.put(yearKey, yearObj);
+        }
+        for (int month = 1; month <= 12; month++) {
+            JSONObject monthObj = new JSONObject();
+            // graph_data with each day initialized to be 0
+            monthObj.put("graph_data", new JSONObject());
+            JSONObject daily_balance = new JSONObject();
+            for (int day = 1; day <= 31; day++) {
+                String str_day = String.valueOf(day);
+                daily_balance.put(str_day, 0.0);
+            }
+
+            // category amounts with categories initialized
+            JSONObject categoryTotals = new JSONObject();
+            for (String cat : pie_chart_categories) {
+                categoryTotals.put(cat, 0.0);
+            }
+            monthObj.put("category_totals", categoryTotals);
+
+            yearObj.put(String.valueOf(month), monthObj);
+        }
+
+    }
+
+    public void loadData(AccountDataAccessInterface accountDataAccessInterface) {
+
         List<Account> allAccounts = accountDataAccessInterface.getAllAccounts();
-        Map<Integer, Map<Integer, Double>> yearTransactions = new HashMap<>();
+
         for (Account account : allAccounts) {
+
             List<Transaction> getTransaction = account.getAccountTransactions();
+
             for (Transaction transaction : getTransaction) {
                 int year = transaction.getTransactionDate().getYear();
-                // if year not in
                 int month = transaction.getTransactionDate().getMonthValue();
+                int day = transaction.getTransactionDate().getDayOfMonth();
                 double amount = transaction.getTransactionAmount();
                 String category = String.valueOf(transaction.getTransactionCategory());
-                // new month JSON object
-                // new line graph JSON Object
-                // new category total JSON Object
 
-                JSONObject yearObj = yearTransactions.optJSONObject(yearKey);
-                if (yearObj == null) {
-                    yearObj = new JSONObject();
-                    yearTransactions.put(yearKey, yearObj);
-                }
+                String yearKey = String.valueOf(year);
+                String monthKey = String.valueOf(month);
+                String dayKey = String.valueOf(day);
 
-                // ---------- LEVEL 2: MONTH ----------
-                JSONObject monthObj = yearObj.optJSONObject(monthKey);
-                if (monthObj == null) {
-                    monthObj = new JSONObject();
-                    yearObj.put(monthKey, monthObj);
-                }
+                JSONObject month_data = yearTransactions.optJSONObject(yearKey).optJSONObject(monthKey);
+                // graph data, for each day, make a key and the value is the balance
 
-                // ---------- LEVEL 3a: GRAPH DATA (day -> amount) ----------
-                JSONObject graphData = monthObj.optJSONObject("graph_data");
-                if (graphData == null) {
-                    graphData = new JSONObject();
-                    monthObj.put("graph_data", graphData);
-                }
+                JSONObject graphData = month_data.optJSONObject("graph_data");
+                double current = graphData.optDouble(dayKey);
+                double updated = current + amount;
+                graphData.put(dayKey, updated);
+
+                // category totals, for each transaction, add to the category's value by the transaction amount
+                JSONObject categoryTotals = month_data.optJSONObject("category_totals");
+                double current_category = categoryTotals.optDouble(category);
+                double updated_category = current_category + amount;
+                categoryTotals.put(category, updated_category);
+
 
             }
         }
-
-        ArrayList<String> balances = new ArrayList<>();
-        Map<String, Double> lineGraph = new HashMap<>();
     }
-
-    public class MonthlyReportData {
-        private final Map<Integer, Double> graphData = new HashMap<>();
-        private final Map<String, Double> categoryTotals = new HashMap<>();
-
-        public Map<Integer, Double> getGraphData() {
-            return graphData;
-        }
-
-        public Map<String, Double> getCategoryTotals() {
-            return categoryTotals;
-        }
-
-        public void addTransaction(int day, double amount, String category) {
-            // Update line graph data (day -> sum of amounts)
-            graphData.merge(day, amount, Double::sum);
-
-            // Update pie chart data (ignore SALARY)
-            if (!"SALARY".equalsIgnoreCase(category)) {
-                categoryTotals.merge(category, amount, Double::sum);
-            }
-        }
-    }
-
-
-//     public Account(String accountNumber, AccountType type, double balance) {
-//        this.accountNumber = accountNumber;
-//        this.type = type;
-//        this.transactions = new ArrayList<>();
-//        this.balance = balance;
-//    }
-//
-//    public String getAccountNumber() {
-//        return this.accountNumber;
-//    }
-//
-//    public AccountType getAccountType() {
-//        return this.type;
-//    }
-//
-//    public List<Transaction> getAccountTransactions() {
-//        return this.transactions;
-//    }
-//
-//    public double getAccountBalance() {
-//        return this.balance;
-//    }
-
-//    public Transaction(double amount, TransactionType type, TransactionCategory category, LocalDate date, String accountNumber) {
-//        this.amount = amount;
-//        this.type = type;
-//        this.category = category;
-//        this.date = date;
-//        this.accountNumber = accountNumber;
-//    }
-//
-//    public double getTransactionAmount() {
-//        return this.amount;
-//    }
-//
-//    public TransactionType getTransactionType() {
-//        return this.type;
-//    }
-//
-//    public TransactionCategory getTransactionCategory() {
-//        return this.category;
-//    }
-//
-//    public LocalDate getTransactionDate() {
-//        return this.date;
-//    }
-//
-//    public String getAccountNumber() {
-//        return this.accountNumber;
-//    }
-
 
 }
