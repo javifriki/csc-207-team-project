@@ -39,13 +39,31 @@ public class MonthlyReportState {
         static int currentDay = today.getDayOfMonth();
     }
 
-    public class getAllData {
-        return JSONObject yearTransactions;
+    public JSONObject getAllData() {
+        return yearTransactions;
     }
 
-    public class getYearData(int year) {
+    public JSONObject getYearData(int year) {
         String str_year = String.valueOf(year);
         return yearTransactions.getJSONObject(str_year);
+    }
+
+    public JSONObject getMonthData(int year, int month) {
+        String strYear = String.valueOf(year);
+        String strMonth = String.valueOf(month);
+        return yearTransactions.getJSONObject(strYear).getJSONObject(strMonth);
+    }
+
+    public JSONObject getLineGraph(int year, int month) {
+        String strYear = String.valueOf(year);
+        String strMonth = String.valueOf(month);
+        return yearTransactions.getJSONObject(strYear).getJSONObject(strMonth).getJSONObject("lineGraph");
+    }
+
+    public JSONObject getPieChart(int year, int month) {
+        String strYear = String.valueOf(year);
+        String strMonth = String.valueOf(month);
+        return yearTransactions.getJSONObject(strYear).getJSONObject(strMonth).getJSONObject("category_totals");
     }
 
 
