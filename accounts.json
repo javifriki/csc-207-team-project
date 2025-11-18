@@ -1,0 +1,54 @@
+{
+    "ACC67890": {
+        "balance": 5000,
+        "accountType": "SAVINGS",
+        "transactionList": [
+            {
+                "transactionType": "INCOME",
+                "date": "2025-10-05",
+                "amount": 300,
+                "transactionCategory": "SALARY"
+            },
+            {
+                "transactionType": "EXPENSE",
+                "date": "2025-10-08",
+                "amount": 100,
+                "transactionCategory": "UTILITIES"
+            }
+        ]
+    },
+    "ad1234": {
+        "balance": 6767,
+        "accountType": "SAVINGS",
+        "transactionList": [{
+            "transactionType": "INCOME",
+            "date": "2024-01-20",
+            "amount": 1059,
+            "transactionCategory": "ENTERTAINMENT"
+        }]
+    },
+    "ACC12345": {
+        "balance": 1250.5,
+        "accountType": "CHECKING",
+        "transactionList": [
+            {
+                "transactionType": "INCOME",
+                "date": "2025-10-01",
+                "amount": 200,
+                "transactionCategory": "SALARY"
+            },
+            {
+                "transactionType": "EXPENSE",
+                "date": "2025-10-02",
+                "amount": 50,
+                "transactionCategory": "DINING"
+            },
+            {
+                "transactionType": "EXPENSE",
+                "date": "2025-10-03",
+                "amount": 100,
+                "transactionCategory": "GROCERIES"
+            }
+        ]
+    }
+}
