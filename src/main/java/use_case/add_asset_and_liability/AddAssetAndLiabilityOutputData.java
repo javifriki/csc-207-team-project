@@ -3,26 +3,23 @@ package use_case.add_asset_and_liability;
 import entity.AssetAndLiability;
 
 public class AddAssetAndLiabilityOutputData {
-    private String message;
     private AssetAndLiability.Type type;
     private double assetAndLiabilityAmount;
     private double interestRate;
     private AssetAndLiability.RatePeriod ratePeriod;
+    private AssetAndLiability assetAndLiability;
 
     // Transaction of $amount added successfully to $accountNumber. New balance is $newBalance. Additional messages: $message
 
-    public AddAssetAndLiabilityOutputData(String message, AssetAndLiability.Type type,
+    public AddAssetAndLiabilityOutputData(AssetAndLiability.Type type,
                                           double assetAndLiabilityAmount, double interestRate,
-                                          AssetAndLiability.RatePeriod ratePeriod) {
-        this.message = message;
+                                          AssetAndLiability.RatePeriod ratePeriod,
+                                          AssetAndLiability assetAndLiability) {
         this.type = type;
         this.assetAndLiabilityAmount = assetAndLiabilityAmount;
         this.interestRate = interestRate;
         this.ratePeriod = ratePeriod;
-    }
-
-    public String getMessage() {
-        return this.message;
+        this.assetAndLiability = assetAndLiability;
     }
 
     public AssetAndLiability.Type getType() {
@@ -39,5 +36,9 @@ public class AddAssetAndLiabilityOutputData {
 
     public AssetAndLiability.RatePeriod getRatePeriod() {
         return ratePeriod;
+    }
+
+    public AssetAndLiability getAssetAndLiability() {
+        return assetAndLiability;
     }
 }

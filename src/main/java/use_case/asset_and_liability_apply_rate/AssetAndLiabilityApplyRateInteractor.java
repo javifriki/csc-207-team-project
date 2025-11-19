@@ -19,7 +19,7 @@ public class AssetAndLiabilityApplyRateInteractor implements AssetAndLiabilityAp
     public void execute(AssetAndLiabilityApplyRateInputData assetAndLiabilityApplyRateInputData) {
 
         final String assetAndLiabilityID = assetAndLiabilityApplyRateInputData.getID();
-        final LocalDate endDate = assetAndLiabilityApplyRateInputData.getEndDate();
+        LocalDate endDate = assetAndLiabilityApplyRateInputData.getEndDate();
 
         AssetAndLiability assetAndLiability = assetAndLiabilityDataAccessObject.getAssetAndLiability(assetAndLiabilityID);
 
@@ -48,6 +48,8 @@ public class AssetAndLiabilityApplyRateInteractor implements AssetAndLiabilityAp
         } else {
             // PRINT ERROR MESSAGE: NOT ENOUGH TIME TO APPLY RATE YET!!!
         }
+
+        endDate = assetAndLiability.getDateUpdated();
 
         assetAndLiabilityDataAccessObject.saveAssetAndLiability(assetAndLiability);
 

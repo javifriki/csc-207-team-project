@@ -1,4 +1,9 @@
 package interface_adaptor.asset_and_liability_apply_rate;
 
-public class AssetAndLiabilityApplyRateViewModel {
+import interface_adaptor.ViewModel;
+
+public class AssetAndLiabilityApplyRateViewModel extends ViewModel<AssetAndLiabilityApplyRateState> {
+    public AssetAndLiabilityApplyRateViewModel() {
+        setState(new AssetAndLiabilityApplyRateState());
+    }
 }

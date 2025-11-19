@@ -23,17 +23,15 @@ public class AssetAndLiability {
     private LocalDate dateUpdated;
     private double interestRate;
 
-    // NOTE: implement Builder pattern!
-
     public AssetAndLiability(String name, Type type, RatePeriod ratePeriod, double amount, String ID,
-                             LocalDate dateCreated, double interestRate) {
+                             LocalDate dateCreated, LocalDate dateUpdated, double interestRate) {
         this.name = name;
         this.type = type;
         this.ratePeriod = ratePeriod;
         this.amount = amount;
         this.ID = ID;
         this.dateCreated = dateCreated;
-        this.dateUpdated = dateCreated;
+        this.dateUpdated = dateUpdated;
         this.interestRate = interestRate;
     }
 

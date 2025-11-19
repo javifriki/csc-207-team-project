@@ -1,12 +1,10 @@
 
 package data_access;
 
-import entity.Account;
 import entity.AssetAndLiability;
-import entity.Transaction;
+import entity.AssetAndLiabilityBuilder;
 import use_case.add_asset_and_liability.AssetAndLiabilityDataAccessInterface;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -36,7 +34,7 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
             assetAndLiabilityRatePeriodHashMap.put(ratePeriod.toString(), ratePeriod);
         }
 
-        loadAllAccountData();
+        loadAllAssetAndLiabilityData();
     }
 
     /*
@@ -45,7 +43,8 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
             "name": "Housing",
             "type": ASSET,
             "amount": 200000.0,
-            "date": "2025-10-01",
+            "dateCreated": "2025-10-01",
+            "dateUpdated": "2025-10-01",
             "interestRate": 0.02,
             "ratePeriod": ANNUALLY
         },
@@ -53,14 +52,15 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
             "name": "Student Loan",
             "type": LIABILITY,
             "amount": 100000000000000.0,
-            "date": "2025-10-09",
+            "dateCreated": "2025-10-09",
+            "dateUpdated": "2025-12-20",
             "interestRate": 0.10,
             "ratePeriod": MONTHLY
         }
     }
     */
 
-    private void loadAllAccountData() {
+    private void loadAllAssetAndLiabilityData() {
         try {
             String contents = Files.readString(Path.of(this.filename)); // in JSON format
             JSONObject assetAndLiabilityIDToAssetAndLiability = new JSONObject(contents);
@@ -78,12 +78,22 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
 
                 double amount = assetAndLiabilityObj.getDouble("amount");
 
-                LocalDate date = LocalDate.parse(assetAndLiabilityObj.getString("date"));
+                LocalDate dateCreated = LocalDate.parse(assetAndLiabilityObj.getString("dateCreated"));
+
+                LocalDate dateUpdated = LocalDate.parse(assetAndLiabilityObj.getString("dateUpdated"));
 
                 double interestRate = assetAndLiabilityObj.getDouble("interestRate");
 
-                AssetAndLiability assetAndLiability = new AssetAndLiability(name, type, ratePeriod,
-                        amount, IDKey, date, interestRate);
+                AssetAndLiability assetAndLiability = new AssetAndLiabilityBuilder()
+                        .addName(name)
+                        .addID(IDKey)
+                        .addAmount(amount)
+                        .addType(type)
+                        .addRatePeriod(ratePeriod)
+                        .addDateCreated(dateCreated)
+                        .addDateUpdated(dateUpdated)
+                        .build();
+
                 this.assetAndLiabilityIDToAssetAndLiability.put(IDKey, assetAndLiability);
             }
         } catch (IOException e) {
@@ -102,6 +112,7 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
                 AssetAndLiability.Type type = assetAndLiability.getType();
                 AssetAndLiability.RatePeriod ratePeriod = assetAndLiability.getRatePeriod();
                 String dateCreated = assetAndLiability.getDateCreated().toString();
+                String dateUpdated = assetAndLiability.getDateUpdated().toString();
                 double interestRate = assetAndLiability.getInterestRate();
 
                 JSONObject assetAndLiabilityObj = new JSONObject();
@@ -110,6 +121,7 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
                 assetAndLiabilityObj.put("ratePeriod", ratePeriod);
                 assetAndLiabilityObj.put("amount", amount);
                 assetAndLiabilityObj.put("dateCreated", dateCreated);
+                assetAndLiabilityObj.put("dateUpdated", dateUpdated);
                 assetAndLiabilityObj.put("interestRate", interestRate);
 
                 baseRoot.put(IDKey, assetAndLiabilityObj);
