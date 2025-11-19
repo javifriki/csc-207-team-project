@@ -1,6 +1,6 @@
 {
     "ACC67890": {
-        "balance": 5000,
+        "balance": 5001,
         "accountType": "SAVINGS",
         "transactionList": [
             {
@@ -14,6 +14,24 @@
                 "date": "2025-10-08",
                 "amount": 100,
                 "transactionCategory": "UTILITIES"
+            },
+            {
+                "transactionType": "INCOME",
+                "date": "2025-11-18",
+                "amount": 69,
+                "transactionCategory": "GROCERIES"
+            },
+            {
+                "transactionType": "EXPENSE",
+                "date": "2025-11-18",
+                "amount": 1,
+                "transactionCategory": "MORTGAGE"
+            },
+            {
+                "transactionType": "EXPENSE",
+                "date": "2025-11-18",
+                "amount": 67,
+                "transactionCategory": "RENT"
             }
         ]
     },
