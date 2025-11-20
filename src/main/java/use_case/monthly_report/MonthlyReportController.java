@@ -6,5 +6,21 @@ package use_case.monthly_report;
  * then is passed into the MonthlyInputBoundary
  */
 
+
+import use_case.monthly_report.MonthlyReportInputBoundary;
+import use_case.monthly_report.MonthlyReportInputData;
+
 public class MonthlyReportController {
+
+    private final MonthlyReportInputBoundary interactor;
+
+    public MonthlyReportController(MonthlyReportInputBoundary interactor) {
+        this.interactor = interactor;
+    }
+
+    public void showMonthlyReport(String accountNumber, int year, int month) {
+        MonthlyReportInputData inputData =
+                new MonthlyReportInputData(accountNumber, year, month);
+        interactor.execute(inputData);
+    }
 }

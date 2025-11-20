@@ -48,7 +48,7 @@ public class MonthlyReportViewModel {
         return yearTransactions.getJSONObject(strYear).getJSONObject(strMonth);
     }
 
-    public JSONObject getLineGraph(int year, int month) {
+    public static JSONObject getLineGraph(int year, int month) {
         String strYear = String.valueOf(year);
         String strMonth = String.valueOf(month);
         return yearTransactions.getJSONObject(strYear).getJSONObject(strMonth).getJSONObject("lineGraph");
