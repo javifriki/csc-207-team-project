@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="492ab5d4-e8b3-4f1a-8469-bff2c2b20498" name="Changes" comment="untracked files prevent checkout error need to commit">
-      <change afterPath="$PROJECT_DIR$/src/main/java/use_case/monthly_report/MonthlyReportAPI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/use_case/monthly_report/MonthlyReportInputBoundary.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/monthly_report/MonthlyReportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/monthly_report/MonthlyReportController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/monthly_report/MonthlyReportPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/monthly_report/MonthlyReportPresenter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/monthly_report/MonthlyReportView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/monthly_report/MonthlyReportView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/monthly_report/MonthlyReportViewModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/monthly_report/MonthlyReportViewModel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
