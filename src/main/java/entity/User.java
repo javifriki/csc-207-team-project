@@ -18,6 +18,8 @@ public class User {
         this.password = password;
         this.name = name;
         this.accountNumbers = new ArrayList<>();
+        this.assetsList = new ArrayList<>();
+        this.liabilitiesList = new ArrayList<>();
     }
 
     public String getName() {return name;}
