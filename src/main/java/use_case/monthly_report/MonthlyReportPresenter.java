@@ -1,8 +1,4 @@
 package use_case.monthly_report;
-import use_case.monthly_report.MonthlyReportOutputBoundary;
-import use_case.monthly_report.MonthlyReportInputBoundary;
-import use_case.monthly_report.MonthlyReportViewModel;
-import use_case.monthly_report.MonthlyReportViewManagerModel;
 
 public class MonthlyReportPresenter implements MonthlyReportOutputBoundary{
     private final MonthlyReportViewModel monthlyReportViewModel;
