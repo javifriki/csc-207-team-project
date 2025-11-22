@@ -4,6 +4,7 @@ import entity.AssetAndLiability;
 import use_case.net_worth_table.NetWorthTableOutputBoundary;
 import use_case.net_worth_table.NetWorthTableOutputData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NetWorthTablePresenter implements NetWorthTableOutputBoundary {
@@ -14,17 +15,25 @@ public class NetWorthTablePresenter implements NetWorthTableOutputBoundary {
         this.viewModel = viewModel;
     }
 
-    public void present(NetWorthTableOutputData NetWorthTableOutputData) {
-        List<AssetAndLiability> assets = NetWorthTableOutputData.getAllAssets();
-        List<AssetAndLiability> liabilities = NetWorthTableOutputData.getAllLiabilities();
+    public void present(NetWorthTableOutputData netWorthTableOutputData) {
+        List<NetWorthTableRow> assetRows = new ArrayList<>();
+        for (AssetAndLiability a : netWorthTableOutputData.getAllAssets()) {
+            assetRows.add(new NetWorthTableRow(a.getName(), a.getAmount()));
+        }
 
-        viewModel = new NetWorthTableViewModel(
-                assets,
-                liabilities,
-                NetWorthTableOutputData.getTotalAssets(),
-                NetWorthTableOutputData.getTotalLiabilities(),
-                NetWorthTableOutputData.getNetWorth()
-        );
+        List<NetWorthTableRow> liabilityRows = new ArrayList<>();
+        for (AssetAndLiability l : netWorthTableOutputData.getAllLiabilities()) {
+            liabilityRows.add(new NetWorthTableRow(l.getName(), l.getAmount()));
+        }
+
+        NetWorthTableState newState = new NetWorthTableState();
+        newState.setAssetRows(assetRows);
+        newState.setLiabilityRows(liabilityRows);
+        newState.setTotalAssets(netWorthTableOutputData.getTotalAssets());
+        newState.setTotalLiabilities(netWorthTableOutputData.getTotalLiabilities());
+        newState.setNetWorth(netWorthTableOutputData.getNetWorth());
+
+        viewModel.setState(newState);
     }
 
     public NetWorthTableViewModel getViewModel() {

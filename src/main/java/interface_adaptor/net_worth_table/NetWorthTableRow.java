@@ -1,6 +1,6 @@
 package interface_adaptor.net_worth_table;
 
-//helper View Model class
+//helper class
 public class NetWorthTableRow {
     private final String name;
     private final double amount;
