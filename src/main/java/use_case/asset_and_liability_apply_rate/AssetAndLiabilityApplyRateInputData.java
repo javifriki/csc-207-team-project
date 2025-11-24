@@ -5,16 +5,12 @@ import entity.AssetAndLiability;
 import java.time.LocalDate;
 
 public class AssetAndLiabilityApplyRateInputData {
-    private final String ID;
-    private final LocalDate endDate;
+    private final String[] IDs;
 
-    public AssetAndLiabilityApplyRateInputData(String ID,
-                                         LocalDate endDate) {
-        this.ID = ID;
-        this.endDate = endDate;
+    public AssetAndLiabilityApplyRateInputData(String[] IDs) {
+        this.IDs = IDs;
     }
 
     // Getters
-    public String getID() { return ID; }
-    public LocalDate getEndDate() { return endDate; }
+    public String[] getIDs() { return IDs; }
 }

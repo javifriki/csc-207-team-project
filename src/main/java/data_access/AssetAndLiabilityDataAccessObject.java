@@ -2,7 +2,6 @@
 package data_access;
 
 import entity.AssetAndLiability;
-import entity.AssetAndLiabilityBuilder;
 import use_case.add_asset_and_liability.AssetAndLiabilityDataAccessInterface;
 
 import org.json.JSONObject;
@@ -42,18 +41,18 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
         "A0001": {
             "name": "Housing",
             "type": ASSET,
-            "amount": 200000.0,
+            "initialAmount": 200000.0,
+            "currentAmount": 200000.0
             "dateCreated": "2025-10-01",
-            "dateUpdated": "2025-10-01",
             "interestRate": 0.02,
             "ratePeriod": ANNUALLY
         },
         "L0002": {
             "name": "Student Loan",
             "type": LIABILITY,
-            "amount": 100000000000000.0,
+            "initialAmount": 200000000000.0,
+            "currentAmount": 40000000000000.0
             "dateCreated": "2025-10-09",
-            "dateUpdated": "2025-12-20",
             "interestRate": 0.10,
             "ratePeriod": MONTHLY
         }
@@ -76,23 +75,17 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
                 AssetAndLiability.RatePeriod ratePeriod = this.assetAndLiabilityRatePeriodHashMap.
                         get(assetAndLiabilityObj.getString("ratePeriod"));
 
-                double amount = assetAndLiabilityObj.getDouble("amount");
+                double initialAmount = assetAndLiabilityObj.getDouble("initialAmount");
+
+                double currentAmount = assetAndLiabilityObj.getDouble("currentAmount");
 
                 LocalDate dateCreated = LocalDate.parse(assetAndLiabilityObj.getString("dateCreated"));
 
-                LocalDate dateUpdated = LocalDate.parse(assetAndLiabilityObj.getString("dateUpdated"));
-
                 double interestRate = assetAndLiabilityObj.getDouble("interestRate");
 
-                AssetAndLiability assetAndLiability = new AssetAndLiabilityBuilder()
-                        .addName(name)
-                        .addID(IDKey)
-                        .addAmount(amount)
-                        .addType(type)
-                        .addRatePeriod(ratePeriod)
-                        .addDateCreated(dateCreated)
-                        .addDateUpdated(dateUpdated)
-                        .build();
+                AssetAndLiability assetAndLiability = new AssetAndLiability(name, type, ratePeriod, initialAmount,
+                                                            currentAmount, IDKey,
+                                                            dateCreated, interestRate);
 
                 this.assetAndLiabilityIDToAssetAndLiability.put(IDKey, assetAndLiability);
             }
@@ -108,20 +101,20 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
             for (String IDKey : this.assetAndLiabilityIDToAssetAndLiability.keySet()) {
                 AssetAndLiability assetAndLiability = this.assetAndLiabilityIDToAssetAndLiability.get(IDKey);
                 String name = assetAndLiability.getName();
-                double amount = assetAndLiability.getAmount();
+                double initialAmount = assetAndLiability.getInitialAmount();
+                double currentAmount = assetAndLiability.getCurrentAmount();
                 AssetAndLiability.Type type = assetAndLiability.getType();
                 AssetAndLiability.RatePeriod ratePeriod = assetAndLiability.getRatePeriod();
                 String dateCreated = assetAndLiability.getDateCreated().toString();
-                String dateUpdated = assetAndLiability.getDateUpdated().toString();
                 double interestRate = assetAndLiability.getInterestRate();
 
                 JSONObject assetAndLiabilityObj = new JSONObject();
                 assetAndLiabilityObj.put("name", name);
                 assetAndLiabilityObj.put("type", type);
                 assetAndLiabilityObj.put("ratePeriod", ratePeriod);
-                assetAndLiabilityObj.put("amount", amount);
+                assetAndLiabilityObj.put("initialAmount", initialAmount);
+                assetAndLiabilityObj.put("currentAmount", currentAmount);
                 assetAndLiabilityObj.put("dateCreated", dateCreated);
-                assetAndLiabilityObj.put("dateUpdated", dateUpdated);
                 assetAndLiabilityObj.put("interestRate", interestRate);
 
                 baseRoot.put(IDKey, assetAndLiabilityObj);

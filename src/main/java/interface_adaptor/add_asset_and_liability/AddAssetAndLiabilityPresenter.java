@@ -12,8 +12,8 @@ public class AddAssetAndLiabilityPresenter implements AddAssetAndLiabilityOutput
     }
 
     public void prepareAssetAndLiabilitySuccessView (AddAssetAndLiabilityOutputData addAssetAndLiabilityOutputData){
-        // with a popup, display the success message with info of the transaction
-        double amount = addAssetAndLiabilityOutputData.getAssetAndLiabilityAmount();
+        // with a popup, display the success message with info of the asset/liability
+        double initialAmount = addAssetAndLiabilityOutputData.getInitialAmount();
         AssetAndLiability.Type type = addAssetAndLiabilityOutputData.getType();
         AssetAndLiability.RatePeriod ratePeriod = addAssetAndLiabilityOutputData.getRatePeriod();
         double interestRate = addAssetAndLiabilityOutputData.getInterestRate();
@@ -23,7 +23,7 @@ public class AddAssetAndLiabilityPresenter implements AddAssetAndLiabilityOutput
         AddAssetAndLiabilityState addAssetAndLiabilityState = this.addAssetAndLiabilityViewModel.getState();
         addAssetAndLiabilityState.setPopupMessage(
                 type.toString() + " added successfully"
-                        + "with amount " + amount
+                        + "with initial amount " + initialAmount
                         + "\nRate Period: " + ratePeriod
                         + "\nInterest Rate: " + interestRate
         );

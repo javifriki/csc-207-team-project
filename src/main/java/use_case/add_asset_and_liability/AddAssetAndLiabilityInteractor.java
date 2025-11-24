@@ -2,7 +2,6 @@ package use_case.add_asset_and_liability;
 
 import data_access.AssetAndLiabilityDataAccessObject;
 import entity.AssetAndLiability;
-import entity.AssetAndLiabilityBuilder;
 import interface_adaptor.add_asset_and_liability.AddAssetAndLiabilityPresenter;
 
 import java.time.LocalDate;
@@ -20,32 +19,25 @@ public class AddAssetAndLiabilityInteractor implements AddAssetAndLiabilityInput
 
     @Override
     public void execute(AddAssetAndLiabilityInputData addAssetAndLiabilityInputData) {
-        final String assetAndLiabilityName = addAssetAndLiabilityInputData.getName();
-        final AssetAndLiability.Type assetAndLiabilityType = addAssetAndLiabilityInputData.getType();
-        final double assetAndLiabilityAmount = addAssetAndLiabilityInputData.getAmount();
-        final String assetAndLiabilityID = addAssetAndLiabilityInputData.getID();
+        final String name = addAssetAndLiabilityInputData.getName();
+        final AssetAndLiability.Type type = addAssetAndLiabilityInputData.getType();
+        final double initialAmount = addAssetAndLiabilityInputData.getInitialAmount();
+        final String ID = addAssetAndLiabilityInputData.getID();
         final LocalDate dateCreated = addAssetAndLiabilityInputData.getDateCreated();
         final double interestRate =  addAssetAndLiabilityInputData.getInterestRate();
-        final AssetAndLiability.RatePeriod assetAndLiabilityRatePeriod = addAssetAndLiabilityInputData.getRatePeriod();
+        final AssetAndLiability.RatePeriod ratePeriod = addAssetAndLiabilityInputData.getRatePeriod();
 
-        AssetAndLiability assetAndLiability = new AssetAndLiabilityBuilder()
-                                                    .addName(assetAndLiabilityName)
-                                                    .addID(assetAndLiabilityID)
-                                                    .addAmount(assetAndLiabilityAmount)
-                                                    .addType(assetAndLiabilityType)
-                                                    .addRatePeriod(assetAndLiabilityRatePeriod)
-                                                    .addDateCreated(dateCreated)
-                                                    .addDateUpdated(dateCreated).build();
-
-
+        AssetAndLiability assetAndLiability = new AssetAndLiability(name, type, ratePeriod, initialAmount,
+                                                                    initialAmount, ID,
+                                                                    dateCreated, interestRate);
 
         assetAndLiabilityDataAccessObject.saveAssetAndLiability(assetAndLiability);
 
         final AddAssetAndLiabilityOutputData addAssetAndLiabilityOutputData = new AddAssetAndLiabilityOutputData(
-                assetAndLiabilityType,
-                assetAndLiabilityAmount,
+                type,
+                initialAmount,
                 interestRate,
-                assetAndLiabilityRatePeriod,
+                ratePeriod,
                 assetAndLiability
         );
 

@@ -18,25 +18,28 @@ public class AssetAndLiability {
     private RatePeriod ratePeriod;
     private String name;
     private String ID;
-    private double amount;
+    private double initialAmount;
+    private double currentAmount;
     private LocalDate dateCreated;
-    private LocalDate dateUpdated;
     private double interestRate;
 
-    public AssetAndLiability(String name, Type type, RatePeriod ratePeriod, double amount, String ID,
-                             LocalDate dateCreated, LocalDate dateUpdated, double interestRate) {
+    public AssetAndLiability(String name, Type type, RatePeriod ratePeriod, double initialAmount,
+                             double currentAmount, String ID,
+                             LocalDate dateCreated, double interestRate) {
         this.name = name;
         this.type = type;
         this.ratePeriod = ratePeriod;
-        this.amount = amount;
         this.ID = ID;
+        this.initialAmount = initialAmount;
+        this.currentAmount = currentAmount;
         this.dateCreated = dateCreated;
-        this.dateUpdated = dateUpdated;
         this.interestRate = interestRate;
     }
 
-    public void applyRate(int num) {
-        this.amount *= num;
+    public void applyRate (int num) {
+        for (int i = 0; i < num; i++) {
+            currentAmount *= (1 + interestRate);
+        }
     }
 
     // Getters
@@ -47,7 +50,9 @@ public class AssetAndLiability {
 
     public String getID() { return ID; }
 
-    public double getAmount() { return amount; }
+    public double getInitialAmount() { return initialAmount; }
+
+    public double getCurrentAmount() { return currentAmount; }
 
     public LocalDate getDateCreated() { return dateCreated; }
 
@@ -57,16 +62,8 @@ public class AssetAndLiability {
         return ratePeriod;
     }
 
-    public LocalDate getDateUpdated() {
-        return dateUpdated;
-    }
-
     // Setters
 
-    public void setDateCreated(LocalDate dateCreated) { this.dateCreated = dateCreated; }
-
-    public void setDateUpdated(LocalDate dateUpdated) {
-        this.dateUpdated = dateUpdated;
-    }
+    public void setCurrentAmount(double currentAmount) { this.currentAmount = currentAmount; }
 
 }

@@ -2,6 +2,7 @@ package use_case.asset_and_liability_apply_rate;
 
 import data_access.AssetAndLiabilityDataAccessObject;
 import entity.AssetAndLiability;
+import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRatePresenter;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -9,61 +10,45 @@ import java.time.Period;
 public class AssetAndLiabilityApplyRateInteractor implements AssetAndLiabilityApplyRateInputBoundary{
 
     private final AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject;
-    // presenter
+    private final AssetAndLiabilityApplyRatePresenter  assetAndLiabilityApplyRatePresenter;
 
-    public AssetAndLiabilityApplyRateInteractor (AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject) {
+    public AssetAndLiabilityApplyRateInteractor (AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject,
+                                                 AssetAndLiabilityApplyRatePresenter assetAndLiabilityApplyRatePresenter) {
         this.assetAndLiabilityDataAccessObject = assetAndLiabilityDataAccessObject;
+        this.assetAndLiabilityApplyRatePresenter = assetAndLiabilityApplyRatePresenter;
     }
 
     @Override
     public void execute(AssetAndLiabilityApplyRateInputData assetAndLiabilityApplyRateInputData) {
 
-        final String assetAndLiabilityID = assetAndLiabilityApplyRateInputData.getID();
-        LocalDate endDate = assetAndLiabilityApplyRateInputData.getEndDate();
+        final String[] assetAndLiabilityIDs = assetAndLiabilityApplyRateInputData.getIDs();
 
-        AssetAndLiability assetAndLiability = assetAndLiabilityDataAccessObject.getAssetAndLiability(assetAndLiabilityID);
+        // Updates current amount for all assets and liabilities
+        for (String ID : assetAndLiabilityIDs) {
+            AssetAndLiability assetAndLiability = assetAndLiabilityDataAccessObject.getAssetAndLiability(ID);
 
-        LocalDate dateUpdated = assetAndLiability.getDateUpdated();
-        Period period = Period.between(dateUpdated, endDate);
-        AssetAndLiability.RatePeriod ratePeriod = assetAndLiability.getRatePeriod();
+            LocalDate dateCreated = assetAndLiability.getDateCreated();
+            LocalDate currentDate = LocalDate.now();
+            Period period = Period.between(dateCreated, currentDate);
+            AssetAndLiability.RatePeriod ratePeriod = assetAndLiability.getRatePeriod();
 
-        if (ratePeriod == AssetAndLiability.RatePeriod.MONTHLY && period.getMonths() != 0) {
-            int months = Math.abs(period.getMonths());
-            for (int i = 1; i <= months; i++) {
-                assetAndLiability.applyRate(months);
+            if (ratePeriod == AssetAndLiability.RatePeriod.MONTHLY && period.getMonths() != 0) {
+                assetAndLiability.applyRate(Math.abs(period.getMonths()));
+            } else if (ratePeriod == AssetAndLiability.RatePeriod.QUARTERLY && (Math.abs(period.getMonths())) >= 3) {
+                assetAndLiability.applyRate((Math.abs(period.getMonths())) / 3);
+            } else if (ratePeriod == AssetAndLiability.RatePeriod.ANNUALLY && period.getYears() != 0) {
+                assetAndLiability.applyRate(Math.abs(period.getYears()));
             }
-            assetAndLiability.setDateUpdated(assetAndLiability.getDateUpdated().plusMonths(months));
-        } else if (ratePeriod == AssetAndLiability.RatePeriod.QUARTERLY && (Math.abs(period.getMonths())) >= 3) {
-            int quarters = (Math.abs(period.getMonths())) / 3;
-            for (int i = 1; i <= quarters; i++) {
-                assetAndLiability.applyRate(quarters);
-            }
-            assetAndLiability.setDateUpdated(assetAndLiability.getDateUpdated().plusMonths(quarters * 3));
-        } else if (ratePeriod == AssetAndLiability.RatePeriod.ANNUALLY && period.getYears() != 0) {
-            int years = Math.abs(period.getYears());
-            for (int i = 1; i <= years; i++) {
-                assetAndLiability.applyRate(years);
-            }
-            assetAndLiability.setDateUpdated(assetAndLiability.getDateUpdated().plusMonths(years));
-        } else {
-            // PRINT ERROR MESSAGE: NOT ENOUGH TIME TO APPLY RATE YET!!!
+
+            assetAndLiabilityDataAccessObject.saveAssetAndLiability(assetAndLiability);
         }
 
-        endDate = assetAndLiability.getDateUpdated();
-
-        assetAndLiabilityDataAccessObject.saveAssetAndLiability(assetAndLiability);
-
         final AssetAndLiabilityApplyRateOutputData assetAndLiabilityApplyRateOutputData = new AssetAndLiabilityApplyRateOutputData(
-                "successfully modified amount",
-                assetAndLiability.getType(),
-                assetAndLiability.getAmount(),
-                dateUpdated,
-                endDate,
-                assetAndLiability.getInterestRate(),
-                assetAndLiability.getRatePeriod()
+                "successfully modified amounts",
+                assetAndLiabilityDataAccessObject.getAllAssetAndLiabilities()
         );
 
-        // presenter call
+        assetAndLiabilityApplyRatePresenter.prepareAssetAndLiabilitySuccessView(assetAndLiabilityApplyRateOutputData);
 
     }
 }

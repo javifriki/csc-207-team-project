@@ -26,7 +26,7 @@ public class AddAssetAndLiabilityController {
         }
     }
 
-    public void execute(String name, String type, String ID, double amount,
+    public void execute(String name, String type, String ID, double initialAmount,
                         String date, String ratePeriod, double interestRate) {
         AssetAndLiability.Type assetAndLiabilityType = assetAndLiabilityTypeMap.get(type.toUpperCase());
         AssetAndLiability.RatePeriod assetAndLiabilityRatePeriod =
@@ -37,7 +37,7 @@ public class AddAssetAndLiabilityController {
         final AddAssetAndLiabilityInputData addAssetAndLiabilityInputData =
                 new AddAssetAndLiabilityInputData(
                         name, assetAndLiabilityType, ID,
-                        dateCreated, amount, interestRate,
+                        dateCreated, initialAmount, interestRate,
                         assetAndLiabilityRatePeriod
                 );
 

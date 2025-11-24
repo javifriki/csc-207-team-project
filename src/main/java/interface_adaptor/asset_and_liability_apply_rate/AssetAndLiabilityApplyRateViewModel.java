@@ -4,6 +4,7 @@ import interface_adaptor.ViewModel;
 
 public class AssetAndLiabilityApplyRateViewModel extends ViewModel<AssetAndLiabilityApplyRateState> {
     public AssetAndLiabilityApplyRateViewModel() {
+        super("assetAndLiabilityApplyRate");
         setState(new AssetAndLiabilityApplyRateState());
     }
 }

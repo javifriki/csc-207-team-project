@@ -9,16 +9,16 @@ public class AddAssetAndLiabilityInputData {
     private final String name;
     private final String ID;
     private final LocalDate dateCreated;
-    private final double amount;
+    private final double initialAmount;
     private final double interestRate;
     private final AssetAndLiability.RatePeriod ratePeriod;
 
     public AddAssetAndLiabilityInputData(String name, AssetAndLiability.Type type, String ID,
-                                         LocalDate dateCreated, double amount, double interestRate,
+                                         LocalDate dateCreated, double initialAmount, double interestRate,
                                          AssetAndLiability.RatePeriod ratePeriod) {
         this.name = name;
         this.type = type;
-        this.amount = amount;
+        this.initialAmount = initialAmount;
         this.dateCreated = dateCreated;
         this.ID = ID;
         this.interestRate = interestRate;
@@ -33,7 +33,7 @@ public class AddAssetAndLiabilityInputData {
 
     public String getID() { return ID; }
 
-    public double getAmount() { return amount; }
+    public double getInitialAmount() { return initialAmount; }
 
     public double getInterestRate() { return interestRate; }
 

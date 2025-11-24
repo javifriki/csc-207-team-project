@@ -7,12 +7,22 @@ public class ViewModel<T> {
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
     private T state;
 
+    private final String viewName;
+
+    public ViewModel(String viewName) {
+        this.viewName = viewName;
+    }
+
     public T getState() {
         return this.state;
     }
 
     public void setState(T state) {
         this.state = state;
+    }
+
+    public String getViewName() {
+        return this.viewName;
     }
 
     public void firePropertyChange(String propertyName) {

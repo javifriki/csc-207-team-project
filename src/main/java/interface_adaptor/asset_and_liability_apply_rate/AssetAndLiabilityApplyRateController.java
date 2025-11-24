@@ -14,10 +14,9 @@ public class AssetAndLiabilityApplyRateController {
         this.assetAndLiabilityApplyRateInteractor =  assetAndLiabilityApplyRateInteractor;
     }
 
-    public void execute(String ID, String date) {
-        LocalDate endDate = LocalDate.parse(date);
-
-        final AssetAndLiabilityApplyRateInputData assetAndLiabilityApplyRateInputData = new AssetAndLiabilityApplyRateInputData(ID, endDate);
+    public void execute(String[] IDs) {
+        final AssetAndLiabilityApplyRateInputData assetAndLiabilityApplyRateInputData =
+                new AssetAndLiabilityApplyRateInputData(IDs);
 
         assetAndLiabilityApplyRateInteractor.execute(assetAndLiabilityApplyRateInputData);
     }

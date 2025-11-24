@@ -4,7 +4,7 @@ import entity.AssetAndLiability;
 
 public class AddAssetAndLiabilityOutputData {
     private AssetAndLiability.Type type;
-    private double assetAndLiabilityAmount;
+    private double initialAmount;
     private double interestRate;
     private AssetAndLiability.RatePeriod ratePeriod;
     private AssetAndLiability assetAndLiability;
@@ -12,11 +12,11 @@ public class AddAssetAndLiabilityOutputData {
     // Transaction of $amount added successfully to $accountNumber. New balance is $newBalance. Additional messages: $message
 
     public AddAssetAndLiabilityOutputData(AssetAndLiability.Type type,
-                                          double assetAndLiabilityAmount, double interestRate,
+                                          double initialAmount, double interestRate,
                                           AssetAndLiability.RatePeriod ratePeriod,
                                           AssetAndLiability assetAndLiability) {
         this.type = type;
-        this.assetAndLiabilityAmount = assetAndLiabilityAmount;
+        this.initialAmount = initialAmount;
         this.interestRate = interestRate;
         this.ratePeriod = ratePeriod;
         this.assetAndLiability = assetAndLiability;
@@ -26,8 +26,8 @@ public class AddAssetAndLiabilityOutputData {
         return type;
     }
 
-    public double getAssetAndLiabilityAmount() {
-        return assetAndLiabilityAmount;
+    public double getInitialAmount() {
+        return initialAmount;
     }
 
     public double getInterestRate() {
