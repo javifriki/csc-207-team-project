@@ -1,9 +1,10 @@
 package interface_adaptor.monthly_summary;
 
+import interface_adaptor.ViewModel;
 import java.time.YearMonth;
 import java.util.List;
 
-public class MonthlySummaryViewModel {
+public class MonthlySummaryViewModel extends ViewModel<MonthlySummaryState> {
 
     public static class MonthBarViewModel {
         public final YearMonth month;
@@ -17,13 +18,8 @@ public class MonthlySummaryViewModel {
         }
     }
 
-    private List<MonthBarViewModel> bars;
-
-    public List<MonthBarViewModel> getBars() {
-        return bars;
-    }
-
-    public void setBars(List<MonthBarViewModel> bars) {
-        this.bars = bars;
+    public MonthlySummaryViewModel() {
+        super("monthlySummary");
+        setState(new MonthlySummaryState());
     }
 }
