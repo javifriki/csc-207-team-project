@@ -8,6 +8,8 @@ public class Main {
         JFrame application = appBuilder
                 .addAddTransactionView()
                 .addAddTransactionUseCase()
+                .addMonthlySummaryView()
+                .addMonthlySummaryUseCase()
                 .build();
 
         application.pack();
