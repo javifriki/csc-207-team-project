@@ -8,11 +8,11 @@ import java.time.LocalDate;
 
 public class AddAssetAndLiabilityInteractor implements AddAssetAndLiabilityInputBoundary {
 
-    private final AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject;
-    private final AddAssetAndLiabilityPresenter addAssetAndLiabilityPresenter;
+    private final AssetAndLiabilityDataAccessInterface assetAndLiabilityDataAccessObject;
+    private final AddAssetAndLiabilityOutputBoundary addAssetAndLiabilityPresenter;
 
-    public AddAssetAndLiabilityInteractor (AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject,
-                                           AddAssetAndLiabilityPresenter addAssetAndLiabilityPresenter) {
+    public AddAssetAndLiabilityInteractor (AssetAndLiabilityDataAccessInterface assetAndLiabilityDataAccessObject,
+                                           AddAssetAndLiabilityOutputBoundary addAssetAndLiabilityPresenter) {
         this.assetAndLiabilityDataAccessObject = assetAndLiabilityDataAccessObject;
         this.addAssetAndLiabilityPresenter = addAssetAndLiabilityPresenter;
     }

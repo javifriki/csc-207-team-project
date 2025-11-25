@@ -17,7 +17,7 @@ public class NetWorthTableInteractor implements  NetWorthTableInputBoundary {
 
     @Override
     public void execute(NetWorthTableInputData netWorthTableInputData) {
-        List<Account> capital = assetAndLiabilityDataAccessObject.getAllAccounts();
+        List<AssetAndLiability> capital = assetAndLiabilityDataAccessObject.getAllAssetAndLiabilities();
         double totalAssets = 0.0;
         double totalLiabilities = 0.0;
         List<AssetAndLiability> allAssets = new ArrayList<>();

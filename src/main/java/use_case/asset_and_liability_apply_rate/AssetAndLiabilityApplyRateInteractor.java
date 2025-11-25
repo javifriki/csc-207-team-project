@@ -3,17 +3,18 @@ package use_case.asset_and_liability_apply_rate;
 import data_access.AssetAndLiabilityDataAccessObject;
 import entity.AssetAndLiability;
 import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRatePresenter;
+import use_case.add_asset_and_liability.AssetAndLiabilityDataAccessInterface;
 
 import java.time.LocalDate;
 import java.time.Period;
 
 public class AssetAndLiabilityApplyRateInteractor implements AssetAndLiabilityApplyRateInputBoundary{
 
-    private final AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject;
-    private final AssetAndLiabilityApplyRatePresenter  assetAndLiabilityApplyRatePresenter;
+    private final AssetAndLiabilityDataAccessInterface assetAndLiabilityDataAccessObject;
+    private final AssetAndLiabilityApplyRateOutputBoundary  assetAndLiabilityApplyRatePresenter;
 
-    public AssetAndLiabilityApplyRateInteractor (AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject,
-                                                 AssetAndLiabilityApplyRatePresenter assetAndLiabilityApplyRatePresenter) {
+    public AssetAndLiabilityApplyRateInteractor (AssetAndLiabilityDataAccessInterface assetAndLiabilityDataAccessObject,
+                                                 AssetAndLiabilityApplyRateOutputBoundary assetAndLiabilityApplyRatePresenter) {
         this.assetAndLiabilityDataAccessObject = assetAndLiabilityDataAccessObject;
         this.assetAndLiabilityApplyRatePresenter = assetAndLiabilityApplyRatePresenter;
     }
