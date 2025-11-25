@@ -1,6 +1,8 @@
 package interface_adaptor.asset_and_liability_apply_rate;
 
 import entity.AssetAndLiability;
+import interface_adaptor.add_asset_and_liability.AddAssetAndLiabilityState;
+import interface_adaptor.add_asset_and_liability.AddAssetAndLiabilityViewModel;
 import use_case.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateOutputBoundary;
 import use_case.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateOutputData;
 
@@ -25,6 +27,7 @@ public class AssetAndLiabilityApplyRatePresenter implements AssetAndLiabilityApp
         );
 
         assetAndLiabilityApplyRateState.setAllAssetAndLiabilityList(assetAndLiabilityList);
+
         this.assetAndLiabilityApplyRateViewModel.firePropertyChange("asset/liability success");
     }
 

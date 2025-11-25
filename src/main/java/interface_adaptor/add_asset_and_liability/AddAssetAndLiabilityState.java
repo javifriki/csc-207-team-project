@@ -1,6 +1,7 @@
 package interface_adaptor.add_asset_and_liability;
 
 import entity.AssetAndLiability;
+import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,10 @@ public class AddAssetAndLiabilityState {
 
     public void addAssetAndLiabilityToList(AssetAndLiability assetAndLiability) {
         this.allAssetAndLiabilityList.add(assetAndLiability);
+    }
+
+    public void setAllAssetAndLiabilityList(List<AssetAndLiability> allAssetAndLiabilityList) {
+        this.allAssetAndLiabilityList = allAssetAndLiabilityList;
     }
 
     public void setPopupMessage(String message) {

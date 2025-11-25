@@ -1,8 +1,6 @@
 package use_case.add_asset_and_liability;
 
-import data_access.AssetAndLiabilityDataAccessObject;
 import entity.AssetAndLiability;
-import interface_adaptor.add_asset_and_liability.AddAssetAndLiabilityPresenter;
 
 import java.time.LocalDate;
 

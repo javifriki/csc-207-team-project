@@ -23,12 +23,12 @@ public class NetWorthTableViewModel {
         this.liabilityRows = new  ArrayList<>();
 
         for (AssetAndLiability asset : assets) {
-            NetWorthTableRow row = new NetWorthTableRow(asset.getName(), asset.getAmount());
+            NetWorthTableRow row = new NetWorthTableRow(asset.getName(), asset.getCurrentAmount());
             this.assetRows.add(row);
         }
 
         for (AssetAndLiability liability : liabilities) {
-            NetWorthTableRow row = new NetWorthTableRow(liability.getName(), liability.getAmount());
+            NetWorthTableRow row = new NetWorthTableRow(liability.getName(), liability.getCurrentAmount());
             this.liabilityRows.add(row);
         }
 /*

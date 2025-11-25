@@ -1,22 +1,32 @@
 package app;
 
 import data_access.AccountDataAccessObject;
+import data_access.AssetAndLiabilityDataAccessObject;
 import interface_adaptor.ViewManagerViewModel;
+import interface_adaptor.add_asset_and_liability.AddAssetAndLiabilityController;
+import interface_adaptor.add_asset_and_liability.AddAssetAndLiabilityPresenter;
+import interface_adaptor.add_asset_and_liability.AddAssetAndLiabilityViewModel;
 import interface_adaptor.add_transaction.AddTransactionController;
 import interface_adaptor.add_transaction.AddTransactionPresenter;
 import interface_adaptor.add_transaction.AddTransactionViewModel;
+import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateController;
+import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRatePresenter;
+import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateViewModel;
 import interface_adaptor.monthly_summary.MonthlySummaryController;
 import interface_adaptor.monthly_summary.MonthlySummaryPresenter;
 import interface_adaptor.monthly_summary.MonthlySummaryViewModel;
+import use_case.add_asset_and_liability.AddAssetAndLiabilityInputBoundary;
+import use_case.add_asset_and_liability.AddAssetAndLiabilityInteractor;
+import use_case.add_asset_and_liability.AddAssetAndLiabilityOutputBoundary;
 import use_case.add_transaction.AddTransactionInteractor;
 import use_case.add_transaction.AddTransactionOutputBoundary;
+import use_case.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateInputBoundary;
+import use_case.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateInteractor;
+import use_case.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateOutputBoundary;
 import use_case.monthly_summary.MonthlySummaryInputBoundary;
 import use_case.monthly_summary.MonthlySummaryInteractor;
 import use_case.monthly_summary.MonthlySummaryOutputBoundary;
-import view.AddTransactionView;
-import view.MonthlySummaryView;
-import view.ViewManager;
-import view.ViewWithNavigation;
+import view.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,8 +41,14 @@ public class AppBuilder {
     private AddTransactionViewModel addTransactionViewModel;
     private MonthlySummaryView monthlySummaryView;
     private MonthlySummaryViewModel monthlySummaryViewModel;
+    private AddAssetAndLiabilityView addAssetAndLiabilityView;
+    private AddAssetAndLiabilityViewModel addAssetAndLiabilityViewModel;
+    private AssetAndLiabilityView assetAndLiabilityView;
+    private AssetAndLiabilityApplyRateViewModel assetAndLiabilityApplyRateViewModel;
 
     final AccountDataAccessObject accountDataAccessObject = new AccountDataAccessObject("accounts.json");
+    final AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject =
+            new AssetAndLiabilityDataAccessObject("assetsAndLiabilities.json");
 
     public AppBuilder() {
         this.cardPanel.setLayout(this.cardLayout);
@@ -55,6 +71,7 @@ public class AppBuilder {
         addTransactionView.setAddTransactionController(addTransactionController);
         return this;
     }
+
     public AppBuilder addMonthlySummaryView() {
         monthlySummaryViewModel = new MonthlySummaryViewModel();
         monthlySummaryView = new MonthlySummaryView(monthlySummaryViewModel);
@@ -71,6 +88,52 @@ public class AppBuilder {
 
         MonthlySummaryController monthlySummaryController = new MonthlySummaryController(monthlySummaryInteractor);
         monthlySummaryView.setMonthlySummaryController(monthlySummaryController);
+        return this;
+    }
+
+    public AppBuilder addAddAssetAndLiabilityView() {
+        addAssetAndLiabilityViewModel = new AddAssetAndLiabilityViewModel();
+        addAssetAndLiabilityView = new AddAssetAndLiabilityView(addAssetAndLiabilityViewModel);
+
+        ViewWithNavigation viewWithNav = new ViewWithNavigation(addAssetAndLiabilityView, viewManagerViewModel);
+        this.cardPanel.add(viewWithNav, addAssetAndLiabilityView.getViewName());
+
+        return this;
+    }
+
+    public AppBuilder addAssetAndLiabilityUseCase() {
+        final AddAssetAndLiabilityOutputBoundary addAssetAndLiabilityPresenter =
+                new AddAssetAndLiabilityPresenter(addAssetAndLiabilityViewModel);
+        final AddAssetAndLiabilityInputBoundary addAssetAndLiabilityInteractor =
+                new AddAssetAndLiabilityInteractor(assetAndLiabilityDataAccessObject, addAssetAndLiabilityPresenter);
+
+        AddAssetAndLiabilityController addAssetAndLiabilityController =
+                new AddAssetAndLiabilityController(addAssetAndLiabilityInteractor);
+
+        addAssetAndLiabilityView.setAddAssetAndLiabilityController(addAssetAndLiabilityController);
+        return this;
+    }
+
+    public AppBuilder addAssetAndLiabilityApplyRateView() {
+        assetAndLiabilityApplyRateViewModel = new AssetAndLiabilityApplyRateViewModel();
+        assetAndLiabilityView = new AssetAndLiabilityView(addAssetAndLiabilityViewModel, assetAndLiabilityApplyRateViewModel);
+
+        ViewWithNavigation viewWithNav = new ViewWithNavigation(assetAndLiabilityView, viewManagerViewModel);
+        this.cardPanel.add(viewWithNav, assetAndLiabilityView.getViewName());
+
+        return this;
+    }
+
+    public AppBuilder assetAndLiabilityApplyRateUseCase() {
+        final AssetAndLiabilityApplyRateOutputBoundary assetAndLiabilityApplyRatePresenter =
+                new AssetAndLiabilityApplyRatePresenter(assetAndLiabilityApplyRateViewModel);
+        final AssetAndLiabilityApplyRateInputBoundary assetAndLiabilityApplyRateInteractor =
+                new AssetAndLiabilityApplyRateInteractor(assetAndLiabilityDataAccessObject, assetAndLiabilityApplyRatePresenter);
+
+        AssetAndLiabilityApplyRateController assetAndLiabilityApplyRateController =
+                new AssetAndLiabilityApplyRateController(assetAndLiabilityApplyRateInteractor);
+
+        assetAndLiabilityView.setAssetAndLiabilityApplyRateController(assetAndLiabilityApplyRateController);
         return this;
     }
 

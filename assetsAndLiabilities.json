@@ -1,0 +1,47 @@
+{
+  "L0220": {
+    "interestRate": 0.1,
+    "dateCreated": "2025-11-25",
+    "initialAmount": 29090,
+    "name": "Loan",
+    "ratePeriod": "ANNUALLY",
+    "currentAmount": 29090,
+    "type": "LIABILITY"
+  },
+  "A1000": {
+    "interestRate": 0.04,
+    "dateCreated": "2025-11-25",
+    "initialAmount": 1000000,
+    "name": "House 1",
+    "ratePeriod": "QUARTERLY",
+    "currentAmount": 1000000,
+    "type": "ASSET"
+  },
+  "A1001": {
+    "interestRate": 0.03,
+    "dateCreated": "2025-11-25",
+    "initialAmount": 2000000,
+    "name": "Daddy's Bugatti",
+    "ratePeriod": "MONTHLY",
+    "currentAmount": 2000000,
+    "type": "ASSET"
+  },
+  "L1000": {
+    "interestRate": 0.01,
+    "dateCreated": "2025-11-25",
+    "initialAmount": 100000,
+    "name": "Loan",
+    "ratePeriod": "MONTHLY",
+    "currentAmount": 100000,
+    "type": "LIABILITY"
+  },
+  "L1010": {
+    "interestRate": 0.03,
+    "dateCreated": "2025-11-25",
+    "initialAmount": 100000,
+    "name": "Loan",
+    "ratePeriod": "MONTHLY",
+    "currentAmount": 100000,
+    "type": "LIABILITY"
+  }
+}

@@ -1,6 +1,8 @@
 package view;
 
 import entity.AssetAndLiability;
+import interface_adaptor.add_asset_and_liability.AddAssetAndLiabilityState;
+import interface_adaptor.add_asset_and_liability.AddAssetAndLiabilityViewModel;
 import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateController;
 import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateState;
 import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateViewModel;
@@ -8,6 +10,8 @@ import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRa
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
@@ -21,28 +25,17 @@ public class AssetAndLiabilityView extends JPanel implements PropertyChangeListe
 
     private AssetAndLiabilityApplyRateController assetAndLiabilityApplyRateController;
     private AssetAndLiabilityApplyRateViewModel assetAndLiabilityApplyRateViewModel;
+    private AddAssetAndLiabilityViewModel addAssetAndLiabilityViewModel;
 
-    private JComboBox<String> assetAndLiabilityDropDown;
-    private JButton addAssetAndLiabilityButton = new JButton("Add Asset/Liability");
+    private JComboBox<String> assetAndLiabilityDropDown = new JComboBox<>();
+    private JButton refreshAssetAndLiabilityButton = new JButton("Refresh Asset/Liability");
 
-    public AssetAndLiabilityView(AssetAndLiabilityApplyRateViewModel assetAndLiabilityApplyRateViewModel) {
+    public AssetAndLiabilityView(AddAssetAndLiabilityViewModel addAssetAndLiabilityViewModel, AssetAndLiabilityApplyRateViewModel assetAndLiabilityApplyRateViewModel) {
         this.assetAndLiabilityApplyRateViewModel = assetAndLiabilityApplyRateViewModel;
         this.assetAndLiabilityApplyRateViewModel.addPropertyChangeListener(this);
+        this.addAssetAndLiabilityViewModel = addAssetAndLiabilityViewModel;
 
-        // this part refreshes all current amount of assets and liabilities before the window is open
-        AssetAndLiabilityApplyRateState assetAndLiabilityState = assetAndLiabilityApplyRateViewModel.getState();
-        List<AssetAndLiability> assetAndLiabilities = assetAndLiabilityState.getAllAssetAndLiabilityList();
         Map<String, AssetAndLiability> assetAndLiabilityIDToAssetAndLiability = new HashMap<>();
-
-        String[] IDs = new String[assetAndLiabilities.size()];
-        String[] names = new String[assetAndLiabilities.size()];
-        for (int i = 0; i < assetAndLiabilities.size(); i++) {
-            IDs[i] = assetAndLiabilities.get(i).getID();
-            names[i] = assetAndLiabilities.get(i).getName();
-            assetAndLiabilityIDToAssetAndLiability.put(IDs[i], assetAndLiabilities.get(i));
-        }
-
-        assetAndLiabilityApplyRateController.execute(IDs);
 
         // this part builds up the window
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -51,8 +44,6 @@ public class AssetAndLiabilityView extends JPanel implements PropertyChangeListe
         JLabel title = new JLabel("Assets And Liabilities");
         titlePanel.add(title);
 
-        assetAndLiabilityDropDown = new JComboBox<>(names);
-
         JPanel listPanel = new JPanel();
         JLabel listLabel = new JLabel("All Assets And Liabilities");
         listPanel.add(listLabel);
@@ -60,7 +51,7 @@ public class AssetAndLiabilityView extends JPanel implements PropertyChangeListe
 
         // this button will eventually open up the add asset/liability window
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(addAssetAndLiabilityButton);
+        buttonPanel.add(refreshAssetAndLiabilityButton);
 
         // initially, no asset/liability will be displayed since we haven't selected one
         JPanel namePanel = new JPanel();
@@ -103,29 +94,80 @@ public class AssetAndLiabilityView extends JPanel implements PropertyChangeListe
         ratePeriodPanel.add(ratePeriodLabel);
         ratePeriodPanel.setVisible(false);
 
+        // first we refresh all assets/liabilities amounts whenever the user clicks the refresh button
+        refreshAssetAndLiabilityButton.addActionListener(new ActionListener() {
+           public void actionPerformed(ActionEvent e) {
+               listPanel.remove(assetAndLiabilityDropDown);
+
+               // this part refreshes all current amount of assets and liabilities before the window is open
+               AddAssetAndLiabilityState assetAndLiabilityState = addAssetAndLiabilityViewModel.getState();
+               List<AssetAndLiability> assetAndLiabilities = assetAndLiabilityState.getAllAssetAndLiabilityList();
+
+               String[] IDs = new String[assetAndLiabilities.size()];
+               String[] names = new String[assetAndLiabilities.size()];
+               for (int i = 0; i < assetAndLiabilities.size(); i++) {
+                   IDs[i] = assetAndLiabilities.get(i).getID();
+                   names[i] = assetAndLiabilities.get(i).getName();
+                   assetAndLiabilityIDToAssetAndLiability.put(IDs[i], assetAndLiabilities.get(i));
+               }
+
+               assetAndLiabilityDropDown = new JComboBox<>(names);
+               assetAndLiabilityDropDown.revalidate();
+               assetAndLiabilityDropDown.repaint();
+               listPanel.add(assetAndLiabilityDropDown);
+               listPanel.revalidate();
+               listPanel.repaint();
+
+               assetAndLiabilityApplyRateController.execute(IDs);
+           }
+        });
+
         // listens to any asset/liability selected in the dropdown, and displays accordingly
-        assetAndLiabilityDropDown.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                String selectedID = assetAndLiabilityDropDown.getSelectedItem().toString();
-                AssetAndLiability assetAndLiability = assetAndLiabilityIDToAssetAndLiability.get(selectedID);
+        assetAndLiabilityDropDown.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent event) {
+                if (event.getStateChange() == ItemEvent.SELECTED) {// then we display the asset/liability selected
+                    JComboBox<String> assetAndLiabilityDropDown = (JComboBox<String>) event.getSource();
+                    String selectedID = assetAndLiabilityDropDown.getSelectedItem().toString();
+                    AssetAndLiability assetAndLiability = assetAndLiabilityIDToAssetAndLiability.get(selectedID);
 
-                nameLabel.setText("Asset/Liability Name: " + assetAndLiability.getName());
-                IDLabel.setText("Asset/Liability ID: " + assetAndLiability.getID());
-                typeLabel.setText("Type " + assetAndLiability.getType().toString());
-                dateCreatedLabel.setText("Date Created: " + assetAndLiability.getDateCreated().toString());
-                initialAmountLabel.setText("Initial Amount: " + assetAndLiability.getInitialAmount());
-                currentAmountLabel.setText("Current Amount: " + assetAndLiability.getCurrentAmount());
-                interestRateLabel.setText("Interest Rate: " + assetAndLiability.getInterestRate());
-                ratePeriodLabel.setText("Rate Period: " + assetAndLiability.getRatePeriod().toString());
+                    nameLabel.setText("Asset/Liability Name: " + assetAndLiability.getName());
+                    IDLabel.setText("Asset/Liability ID: " + assetAndLiability.getID());
+                    typeLabel.setText("Type " + assetAndLiability.getType().toString());
+                    dateCreatedLabel.setText("Date Created: " + assetAndLiability.getDateCreated().toString());
+                    initialAmountLabel.setText("Initial Amount: " + assetAndLiability.getInitialAmount());
+                    currentAmountLabel.setText("Current Amount: " + assetAndLiability.getCurrentAmount());
+                    interestRateLabel.setText("Interest Rate: " + assetAndLiability.getInterestRate());
+                    ratePeriodLabel.setText("Rate Period: " + assetAndLiability.getRatePeriod().toString());
 
-                namePanel.setVisible(true);
-                IDPanel.setVisible(true);
-                typePanel.setVisible(true);
-                dateCreatedPanel.setVisible(true);
-                initialAmountPanel.setVisible(true);
-                currentAmountPanel.setVisible(true);
-                interestRatePanel.setVisible(true);
-                ratePeriodPanel.setVisible(true);
+                    namePanel.setVisible(true);
+                    IDPanel.setVisible(true);
+                    typePanel.setVisible(true);
+                    dateCreatedPanel.setVisible(true);
+                    initialAmountPanel.setVisible(true);
+                    currentAmountPanel.setVisible(true);
+                    interestRatePanel.setVisible(true);
+                    ratePeriodPanel.setVisible(true);
+
+                    namePanel.revalidate();
+                    namePanel.repaint();
+                    IDPanel.revalidate();
+                    IDPanel.repaint();
+                    typePanel.revalidate();
+                    typePanel.repaint();
+                    dateCreatedPanel.revalidate();
+                    dateCreatedPanel.repaint();
+                    initialAmountPanel.revalidate();
+                    initialAmountPanel.repaint();
+                    currentAmountPanel.revalidate();
+                    currentAmountPanel.repaint();
+                    interestRatePanel.revalidate();
+                    interestRatePanel.repaint();
+                    ratePeriodPanel.revalidate();
+                    ratePeriodPanel.repaint();
+                    namePanel.revalidate();
+                    namePanel.repaint();
+                }
             }
         });
 
@@ -143,16 +185,13 @@ public class AssetAndLiabilityView extends JPanel implements PropertyChangeListe
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("asset/liability success")) {
-            AssetAndLiabilityApplyRateState assetAndLiabilityApplyRateState = (AssetAndLiabilityApplyRateState) evt.getNewValue();
-            JOptionPane.showMessageDialog(this, assetAndLiabilityApplyRateState.getPopupMessage());
-        } else if (evt.getPropertyName().equals("asset/liability fail")) {
+        if (evt.getPropertyName().equals("asset/liability fail")) {
             AssetAndLiabilityApplyRateState assetAndLiabilityApplyRateState = (AssetAndLiabilityApplyRateState) evt.getNewValue();
             JOptionPane.showMessageDialog(this, assetAndLiabilityApplyRateState.getPopupMessage());
         }
     }
 
-    public void setAddAssetAndLiabilityController(AssetAndLiabilityApplyRateController assetAndLiabilityApplyRateController) {
+    public void setAssetAndLiabilityApplyRateController(AssetAndLiabilityApplyRateController assetAndLiabilityApplyRateController) {
         this.assetAndLiabilityApplyRateController = assetAndLiabilityApplyRateController;
     }
 

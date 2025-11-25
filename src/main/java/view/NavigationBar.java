@@ -18,10 +18,14 @@ public class NavigationBar extends JPanel {
 
         JButton addTransactionButton = new JButton("Add Transaction");
         JButton monthlySummaryButton = new JButton("Monthly Summary");
+        JButton addAssetAndLiabilityButton = new JButton("Add Asset/Liability");
+        JButton assetAndLiabilityListButton = new JButton("Asset/Liability List");
 
         // Style buttons
         styleButton(addTransactionButton);
         styleButton(monthlySummaryButton);
+        styleButton(addAssetAndLiabilityButton);
+        styleButton(assetAndLiabilityListButton);
 
         // Add action listeners
         addTransactionButton.addActionListener(new ActionListener() {
@@ -40,8 +44,26 @@ public class NavigationBar extends JPanel {
             }
         });
 
+        addAssetAndLiabilityButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewManagerViewModel.setState("addAssetAndLiability");
+                viewManagerViewModel.firePropertyChange("viewChange");
+            }
+        });
+
+        assetAndLiabilityListButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewManagerViewModel.setState("assetAndLiabilityApplyRate");
+                viewManagerViewModel.firePropertyChange("viewChange");
+            }
+        });
+
         add(addTransactionButton);
         add(monthlySummaryButton);
+        add(addAssetAndLiabilityButton);
+        add(assetAndLiabilityListButton);
     }
 
     private void styleButton(JButton button) {

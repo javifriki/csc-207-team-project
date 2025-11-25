@@ -61,6 +61,11 @@ public class AddAssetAndLiabilityView extends JPanel implements PropertyChangeLi
         initialAmountPanel.add(initialAmountLabel);
         initialAmountPanel.add(initialAmountText);
 
+        JPanel interestRatePanel = new JPanel();
+        JLabel interestRateLabel = new JLabel("InterestRate: ");
+        interestRatePanel.add(interestRateLabel);
+        interestRatePanel.add(interestRateText);
+
         JPanel ratePeriodPanel = new JPanel();
         JLabel ratePeriodLabel = new JLabel("Rate Period: ");
         ratePeriodPanel.add(ratePeriodLabel);
@@ -89,6 +94,20 @@ public class AddAssetAndLiabilityView extends JPanel implements PropertyChangeLi
                         ratePeriod,
                         interestRate
                 );
+
+                nameText.setText("");
+                IDText.setText("");
+                initialAmountText.setText("");
+                interestRateText.setText("");
+
+                namePanel.revalidate();
+                namePanel.repaint();
+                IDPanel.revalidate();
+                IDPanel.repaint();
+                initialAmountPanel.revalidate();
+                initialAmountPanel.repaint();
+                interestRatePanel.revalidate();
+                interestRatePanel.repaint();
             }
         });
 
@@ -96,6 +115,7 @@ public class AddAssetAndLiabilityView extends JPanel implements PropertyChangeLi
         this.add(IDPanel);
         this.add(typePanel);
         this.add(initialAmountPanel);
+        this.add(interestRatePanel);
         this.add(ratePeriodPanel);
         this.add(buttonPanel);
     }

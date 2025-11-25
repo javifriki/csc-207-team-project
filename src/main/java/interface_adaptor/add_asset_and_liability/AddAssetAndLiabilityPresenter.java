@@ -1,6 +1,8 @@
 package interface_adaptor.add_asset_and_liability;
 
 import entity.AssetAndLiability;
+import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateState;
+import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateViewModel;
 import use_case.add_asset_and_liability.AddAssetAndLiabilityOutputBoundary;
 import use_case.add_asset_and_liability.AddAssetAndLiabilityOutputData;
 
@@ -23,12 +25,13 @@ public class AddAssetAndLiabilityPresenter implements AddAssetAndLiabilityOutput
         AddAssetAndLiabilityState addAssetAndLiabilityState = this.addAssetAndLiabilityViewModel.getState();
         addAssetAndLiabilityState.setPopupMessage(
                 type.toString() + " added successfully"
-                        + "with initial amount " + initialAmount
+                        + "\nWith initial amount: " + initialAmount
                         + "\nRate Period: " + ratePeriod
                         + "\nInterest Rate: " + interestRate
         );
 
         addAssetAndLiabilityState.addAssetAndLiabilityToList(assetAndLiability);
+
         this.addAssetAndLiabilityViewModel.firePropertyChange("asset/liability success");
     }
 
