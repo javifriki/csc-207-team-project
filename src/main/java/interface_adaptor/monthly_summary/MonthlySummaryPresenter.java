@@ -22,7 +22,8 @@ public class MonthlySummaryPresenter implements MonthlySummaryOutputBoundary {
                                 ms.month, ms.totalIncome, ms.totalSpending))
                         .collect(Collectors.toList());
 
-        viewModel.setBars(bars);
-        // you can also fire property change events here for Swing
+        MonthlySummaryState state = viewModel.getState();
+        state.setBars(bars);
+        viewModel.firePropertyChange("summaryUpdated");
     }
 }

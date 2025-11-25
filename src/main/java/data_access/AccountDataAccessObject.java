@@ -36,6 +36,8 @@ public class AccountDataAccessObject implements AccountDataAccessInterface {
         for (Transaction.TransactionCategory type : Transaction.TransactionCategory.values()) {
             transactionCategoryHashMap.put(type.toString(), type);
         }
+
+        loadAllAccountData();
     }
 
     // JSON Structure
@@ -126,48 +128,51 @@ public class AccountDataAccessObject implements AccountDataAccessInterface {
 
     // Save a single newly added account into JSON file
     private void saveAccountData() {
-        JSONObject baseRoot = new JSONObject();
-        for (String accountNumberKey : this.accountNumberToAccount.keySet()) {
-            Account account = this.accountNumberToAccount.get(accountNumberKey);
-            Account.AccountType accountType = account.getAccountType();
-            List<Transaction> transactionList = account.getAccountTransactions();
-            double accountBalance = account.getAccountBalance();
+        try {
+            JSONObject baseRoot = new JSONObject();
+            for (String accountNumberKey : this.accountNumberToAccount.keySet()) {
+                Account account = this.accountNumberToAccount.get(accountNumberKey);
+                Account.AccountType accountType = account.getAccountType();
+                List<Transaction> transactionList = account.getAccountTransactions();
+                double accountBalance = account.getAccountBalance();
 
-            JSONObject accountObj = new JSONObject();
-            accountObj.put("accountType", accountType);
-            accountObj.put("balance", accountBalance);
+                JSONObject accountObj = new JSONObject();
+                accountObj.put("accountType", accountType);
+                accountObj.put("balance", accountBalance);
 
-            JSONArray transactionsJSONArr = new JSONArray();
-            for (Transaction transaction : transactionList) {
-                double transactionAmount = transaction.getTransactionAmount();
-                String transactionType = transaction.getTransactionType().toString();
-                String transactionCategory = transaction.getTransactionCategory().toString();
-                String transactionDate = transaction.getTransactionDate().toString();
+                JSONArray transactionsJSONArr = new JSONArray();
+                for (Transaction transaction : transactionList) {
+                    double transactionAmount = transaction.getTransactionAmount();
+                    String transactionType = transaction.getTransactionType().toString();
+                    String transactionCategory = transaction.getTransactionCategory().toString();
+                    String transactionDate = transaction.getTransactionDate().toString();
 
-                JSONObject transactionObj = new JSONObject();
-                transactionObj.put("amount", transactionAmount);
-                transactionObj.put("transactionType", transactionType);
-                transactionObj.put("transactionCategory", transactionCategory);
-                transactionObj.put("date", transactionDate);
+                    JSONObject transactionObj = new JSONObject();
+                    transactionObj.put("amount", transactionAmount);
+                    transactionObj.put("transactionType", transactionType);
+                    transactionObj.put("transactionCategory", transactionCategory);
+                    transactionObj.put("date", transactionDate);
 
-                transactionsJSONArr.put(transactionObj);
+                    transactionsJSONArr.put(transactionObj);
+                }
+
+                accountObj.put("transactionList", transactionsJSONArr);
+
+                baseRoot.put(accountNumberKey, accountObj);
             }
 
-            accountObj.put("transactionList", transactionsJSONArr);
+            Files.writeString(Path.of(this.filename), baseRoot.toString(4));
 
-            baseRoot.put(accountNumberKey, accountObj);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write Account Data to the JSON file");
         }
     }
 
     // Adds a new Account
     @Override
     public void saveAccount(Account account) {
-        if (!accountNumberToAccount.containsKey(account.getAccountNumber())) {
-            // TODO
-        } else {
-            this.accountNumberToAccount.put(account.getAccountNumber(), account);
-            this.saveAccountData();
-        }
+        this.accountNumberToAccount.put(account.getAccountNumber(), account);
+        this.saveAccountData();
     }
 
     @Override

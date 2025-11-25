@@ -3,16 +3,18 @@ package use_case.add_transaction;
 import data_access.AccountDataAccessObject;
 import entity.Account;
 import entity.Transaction;
+import use_case.account.AccountDataAccessInterface;
 
 import java.time.LocalDate;
 
 public class AddTransactionInteractor implements AddTransactionInputBoundary {
 
-    private final AccountDataAccessObject accountDataAccessObject;
-    // presenter
+    private final AccountDataAccessInterface accountDataAccessObject;
+    private final AddTransactionOutputBoundary addTransactionPresenter;
 
-    public AddTransactionInteractor (AccountDataAccessObject accountDataAccessObject) {
+    public AddTransactionInteractor (AccountDataAccessInterface accountDataAccessObject, AddTransactionOutputBoundary addTransactionPresenter) {
         this.accountDataAccessObject = accountDataAccessObject;
+        this.addTransactionPresenter = addTransactionPresenter;
     }
 
     @Override
@@ -25,28 +27,31 @@ public class AddTransactionInteractor implements AddTransactionInputBoundary {
 
         Account account = accountDataAccessObject.getAccount(accountNumber);
         if (account == null) {
-            // account does not exist
-        } else {
-            if (account.getAccountBalance() - transactionAmount < 0) {
-                // account balance cannot go below. Give red error on screen
-            }
-            Transaction transaction = new Transaction(
-                    transactionAmount,
-                    transactionType,
-                    transactionCategory,
-                    transactionDate,
-                    accountNumber
-            );
-            account.applyTransaction(transaction);
-
-            final AddTransactionOutputData addTransactionOutputData = new AddTransactionOutputData(
-                    "successful",
-                    accountNumber,
-                    transactionAmount,
-                    account.getAccountBalance()
-            );
-            // presenter call
+            addTransactionPresenter.prepareTransactionFailView("Account number: " + accountNumber + " does not exist");
+            return;
         }
 
+        if (account.getAccountBalance() - transactionAmount < 0) {
+            addTransactionPresenter.prepareTransactionFailView("Insufficient funds in account " + accountNumber);
+            return;
+        }
+
+        Transaction transaction = new Transaction(
+                transactionAmount,
+                transactionType,
+                transactionCategory,
+                transactionDate,
+                accountNumber
+        );
+        account.applyTransaction(transaction);
+        accountDataAccessObject.saveAccount(account); // persist the updated account after transaction occurred
+
+        final AddTransactionOutputData addTransactionOutputData = new AddTransactionOutputData(
+                accountNumber,
+                account.getAccountBalance(),
+                transaction
+        );
+
+        addTransactionPresenter.prepareTransactionSuccessView(addTransactionOutputData);
     }
 }
