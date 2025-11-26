@@ -1,7 +1,7 @@
 package use_case.monthly_report;
 
-/**
- * Input Boundary for the Monthly Report Use Case.
- */
+import java.io.IOException;
+
 public interface MonthlyReportInputBoundary {
+    void generateReport(MonthlyReportInputData monthlyReportInputData) throws IOException, InterruptedException;
 }
