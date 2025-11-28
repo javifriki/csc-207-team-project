@@ -4,7 +4,6 @@ import data_access.MonthlyReportDataAccessObject;
 import use_case.account.AccountDataAccessInterface;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 /**
  * Interactor for the Monthly Report Use Case.
@@ -17,7 +16,7 @@ public class MonthlyReportInteractor implements MonthlyReportInputBoundary {
     private final MonthlyReportOutputBoundary presenter;
     private final AccountDataAccessInterface accountGateway;
 
-
+    private boolean initialized = false;
 
     public MonthlyReportInteractor(MonthlyReportDataAccessObject monthlyReportDAO,
                                    MonthlyReportOutputBoundary presenter,
@@ -28,21 +27,27 @@ public class MonthlyReportInteractor implements MonthlyReportInputBoundary {
     }
 
     @Override
-    public void generateReport(MonthlyReportInputData monthlyReportInputData) throws IOException, InterruptedException {
-        int year = Integer.parseInt(MonthlyReportInputData.getYear());
-        int month = Integer.parseInt(MonthlyReportInputData.getMonth());
+    public void generateReport(MonthlyReportInputData inputData) {
+        try {
+            int year = inputData.getYear();
+            int month = inputData.getMonth();
 
-        monthlyReportDAO.init(accountGateway);
-        monthlyReportDAO.load(accountGateway);
+            if (!initialized) {
+                monthlyReportDAO.init(accountGateway);
+                monthlyReportDAO.load(accountGateway);
+                initialized = true;
+            }
 
-        BufferedImage line = MonthlyReportAPI.generateLineChart(year, month);
-        BufferedImage pie = MonthlyReportAPI.generatePieChart(year, month);
+            BufferedImage line = MonthlyReportAPI.generateLineChart(year, month);
+            BufferedImage pie  = MonthlyReportAPI.generatePieChart(year, month);
 
-        presenter.present(new MonthlyReportOutputData(year,
-                                                    month,
-                                                    line,
-                                                    pie)
-        );
+            MonthlyReportOutputData outputData =
+                    new MonthlyReportOutputData(year, month, line, pie);
 
+            presenter.present(outputData);
+
+        } catch (Exception e) {
+            presenter.presentError("Failed to load monthly report: " + e.getMessage());
+        }
     }
 }
