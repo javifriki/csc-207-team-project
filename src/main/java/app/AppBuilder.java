@@ -8,11 +8,15 @@ import interface_adaptor.add_transaction.AddTransactionViewModel;
 import interface_adaptor.monthly_summary.MonthlySummaryController;
 import interface_adaptor.monthly_summary.MonthlySummaryPresenter;
 import interface_adaptor.monthly_summary.MonthlySummaryViewModel;
+import interface_adaptor.month_transactions.MonthTransactionsController;
 import use_case.add_transaction.AddTransactionInteractor;
 import use_case.add_transaction.AddTransactionOutputBoundary;
 import use_case.monthly_summary.MonthlySummaryInputBoundary;
 import use_case.monthly_summary.MonthlySummaryInteractor;
 import use_case.monthly_summary.MonthlySummaryOutputBoundary;
+import use_case.month_transactions.MonthTransactionsInputBoundary;
+import use_case.month_transactions.MonthTransactionsInteractor;
+import use_case.month_transactions.MonthTransactionsOutputBoundary;
 import view.AddTransactionView;
 import view.MonthlySummaryView;
 import view.ViewManager;
@@ -71,6 +75,14 @@ public class AppBuilder {
 
         MonthlySummaryController monthlySummaryController = new MonthlySummaryController(monthlySummaryInteractor);
         monthlySummaryView.setMonthlySummaryController(monthlySummaryController);
+
+        // Add month transactions use case for the monthly summary view
+        final MonthTransactionsOutputBoundary monthTransactionsOutputPresenter = monthlySummaryView.getTransactionPresenter();
+        final MonthTransactionsInputBoundary monthTransactionsInteractor = new MonthTransactionsInteractor(accountDataAccessObject, monthTransactionsOutputPresenter);
+
+        MonthTransactionsController monthTransactionsController = new MonthTransactionsController(monthTransactionsInteractor);
+        monthlySummaryView.setMonthTransactionsController(monthTransactionsController);
+
         return this;
     }
 
