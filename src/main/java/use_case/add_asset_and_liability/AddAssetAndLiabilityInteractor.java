@@ -36,7 +36,7 @@ public class AddAssetAndLiabilityInteractor implements AddAssetAndLiabilityInput
                 initialAmount,
                 interestRate,
                 ratePeriod,
-                assetAndLiability
+                assetAndLiabilityDataAccessObject.getAllAssetAndLiabilities()
         );
 
         addAssetAndLiabilityPresenter.prepareAssetAndLiabilitySuccessView(addAssetAndLiabilityOutputData);

@@ -25,15 +25,13 @@ public class AssetAndLiabilityView extends JPanel implements PropertyChangeListe
 
     private AssetAndLiabilityApplyRateController assetAndLiabilityApplyRateController;
     private AssetAndLiabilityApplyRateViewModel assetAndLiabilityApplyRateViewModel;
-    private AddAssetAndLiabilityViewModel addAssetAndLiabilityViewModel;
 
     private JComboBox<String> assetAndLiabilityDropDown = new JComboBox<>();
     private JButton refreshAssetAndLiabilityButton = new JButton("Refresh Asset/Liability");
 
-    public AssetAndLiabilityView(AddAssetAndLiabilityViewModel addAssetAndLiabilityViewModel, AssetAndLiabilityApplyRateViewModel assetAndLiabilityApplyRateViewModel) {
+    public AssetAndLiabilityView(AssetAndLiabilityApplyRateViewModel assetAndLiabilityApplyRateViewModel) {
         this.assetAndLiabilityApplyRateViewModel = assetAndLiabilityApplyRateViewModel;
         this.assetAndLiabilityApplyRateViewModel.addPropertyChangeListener(this);
-        this.addAssetAndLiabilityViewModel = addAssetAndLiabilityViewModel;
 
         Map<String, AssetAndLiability> assetAndLiabilityIDToAssetAndLiability = new HashMap<>();
 
@@ -99,21 +97,22 @@ public class AssetAndLiabilityView extends JPanel implements PropertyChangeListe
            public void actionPerformed(ActionEvent e) {
                listPanel.remove(assetAndLiabilityDropDown);
 
+               // this controller call lets all assets and liabilities in the json to be loaded in the view model
+               assetAndLiabilityApplyRateController.execute(new String[0]);
+
                // this part refreshes all current amount of assets and liabilities before the window is open
-               AddAssetAndLiabilityState assetAndLiabilityState = addAssetAndLiabilityViewModel.getState();
+               AssetAndLiabilityApplyRateState assetAndLiabilityState = assetAndLiabilityApplyRateViewModel.getState();
                List<AssetAndLiability> assetAndLiabilities = assetAndLiabilityState.getAllAssetAndLiabilityList();
 
                String[] IDs = new String[assetAndLiabilities.size()];
-               String[] names = new String[assetAndLiabilities.size()];
+               String[] namesAndIDs = new String[assetAndLiabilities.size()];
                for (int i = 0; i < assetAndLiabilities.size(); i++) {
                    IDs[i] = assetAndLiabilities.get(i).getID();
-                   names[i] = assetAndLiabilities.get(i).getName();
+                   namesAndIDs[i] = assetAndLiabilities.get(i).getName() + "-" + assetAndLiabilities.get(i).getID();
                    assetAndLiabilityIDToAssetAndLiability.put(IDs[i], assetAndLiabilities.get(i));
                }
 
-               assetAndLiabilityDropDown = new JComboBox<>(names);
-               assetAndLiabilityDropDown.revalidate();
-               assetAndLiabilityDropDown.repaint();
+               assetAndLiabilityDropDown.setModel(new DefaultComboBoxModel<>(namesAndIDs));
                listPanel.add(assetAndLiabilityDropDown);
                listPanel.revalidate();
                listPanel.repaint();
@@ -123,52 +122,50 @@ public class AssetAndLiabilityView extends JPanel implements PropertyChangeListe
         });
 
         // listens to any asset/liability selected in the dropdown, and displays accordingly
-        assetAndLiabilityDropDown.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent event) {
-                if (event.getStateChange() == ItemEvent.SELECTED) {// then we display the asset/liability selected
-                    JComboBox<String> assetAndLiabilityDropDown = (JComboBox<String>) event.getSource();
-                    String selectedID = assetAndLiabilityDropDown.getSelectedItem().toString();
-                    AssetAndLiability assetAndLiability = assetAndLiabilityIDToAssetAndLiability.get(selectedID);
+        assetAndLiabilityDropDown.addItemListener(event -> {
+            if (event.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+                // then we display the asset/liability selected
+                String selectedID = assetAndLiabilityDropDown.getSelectedItem().toString();
+                AssetAndLiability assetAndLiability = assetAndLiabilityIDToAssetAndLiability.get(selectedID.split("-")[1]);
 
-                    nameLabel.setText("Asset/Liability Name: " + assetAndLiability.getName());
-                    IDLabel.setText("Asset/Liability ID: " + assetAndLiability.getID());
-                    typeLabel.setText("Type " + assetAndLiability.getType().toString());
-                    dateCreatedLabel.setText("Date Created: " + assetAndLiability.getDateCreated().toString());
-                    initialAmountLabel.setText("Initial Amount: " + assetAndLiability.getInitialAmount());
-                    currentAmountLabel.setText("Current Amount: " + assetAndLiability.getCurrentAmount());
-                    interestRateLabel.setText("Interest Rate: " + assetAndLiability.getInterestRate());
-                    ratePeriodLabel.setText("Rate Period: " + assetAndLiability.getRatePeriod().toString());
+                nameLabel.setText("Asset/Liability Name: " + assetAndLiability.getName());
+                IDLabel.setText("Asset/Liability ID: " + assetAndLiability.getID());
+                typeLabel.setText("Type " + assetAndLiability.getType().toString());
+                dateCreatedLabel.setText("Date Created: " + assetAndLiability.getDateCreated().toString());
+                initialAmountLabel.setText("Initial Amount: " + assetAndLiability.getInitialAmount());
+                currentAmountLabel.setText("Current Amount: " + assetAndLiability.getCurrentAmount());
+                interestRateLabel.setText("Interest Rate: " + assetAndLiability.getInterestRate());
+                ratePeriodLabel.setText("Rate Period: " + assetAndLiability.getRatePeriod().toString());
 
-                    namePanel.setVisible(true);
-                    IDPanel.setVisible(true);
-                    typePanel.setVisible(true);
-                    dateCreatedPanel.setVisible(true);
-                    initialAmountPanel.setVisible(true);
-                    currentAmountPanel.setVisible(true);
-                    interestRatePanel.setVisible(true);
-                    ratePeriodPanel.setVisible(true);
+                namePanel.setVisible(true);
+                IDPanel.setVisible(true);
+                typePanel.setVisible(true);
+                dateCreatedPanel.setVisible(true);
+                initialAmountPanel.setVisible(true);
+                currentAmountPanel.setVisible(true);
+                interestRatePanel.setVisible(true);
+                ratePeriodPanel.setVisible(true);
 
-                    namePanel.revalidate();
-                    namePanel.repaint();
-                    IDPanel.revalidate();
-                    IDPanel.repaint();
-                    typePanel.revalidate();
-                    typePanel.repaint();
-                    dateCreatedPanel.revalidate();
-                    dateCreatedPanel.repaint();
-                    initialAmountPanel.revalidate();
-                    initialAmountPanel.repaint();
-                    currentAmountPanel.revalidate();
-                    currentAmountPanel.repaint();
-                    interestRatePanel.revalidate();
-                    interestRatePanel.repaint();
-                    ratePeriodPanel.revalidate();
-                    ratePeriodPanel.repaint();
-                    namePanel.revalidate();
-                    namePanel.repaint();
-                }
+                namePanel.revalidate();
+                namePanel.repaint();
+                IDPanel.revalidate();
+                IDPanel.repaint();
+                typePanel.revalidate();
+                typePanel.repaint();
+                dateCreatedPanel.revalidate();
+                dateCreatedPanel.repaint();
+                initialAmountPanel.revalidate();
+                initialAmountPanel.repaint();
+                currentAmountPanel.revalidate();
+                currentAmountPanel.repaint();
+                interestRatePanel.revalidate();
+                interestRatePanel.repaint();
+                ratePeriodPanel.revalidate();
+                ratePeriodPanel.repaint();
+                namePanel.revalidate();
+                namePanel.repaint();
             }
+
         });
 
         this.add(titlePanel);

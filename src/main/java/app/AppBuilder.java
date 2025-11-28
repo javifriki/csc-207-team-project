@@ -116,7 +116,7 @@ public class AppBuilder {
 
     public AppBuilder addAssetAndLiabilityApplyRateView() {
         assetAndLiabilityApplyRateViewModel = new AssetAndLiabilityApplyRateViewModel();
-        assetAndLiabilityView = new AssetAndLiabilityView(addAssetAndLiabilityViewModel, assetAndLiabilityApplyRateViewModel);
+        assetAndLiabilityView = new AssetAndLiabilityView(assetAndLiabilityApplyRateViewModel);
 
         ViewWithNavigation viewWithNav = new ViewWithNavigation(assetAndLiabilityView, viewManagerViewModel);
         this.cardPanel.add(viewWithNav, assetAndLiabilityView.getViewName());

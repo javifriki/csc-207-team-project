@@ -1,10 +1,10 @@
 package interface_adaptor.add_asset_and_liability;
 
 import entity.AssetAndLiability;
-import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateState;
-import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateViewModel;
 import use_case.add_asset_and_liability.AddAssetAndLiabilityOutputBoundary;
 import use_case.add_asset_and_liability.AddAssetAndLiabilityOutputData;
+
+import java.util.List;
 
 public class AddAssetAndLiabilityPresenter implements AddAssetAndLiabilityOutputBoundary {
     private final AddAssetAndLiabilityViewModel addAssetAndLiabilityViewModel;
@@ -20,7 +20,7 @@ public class AddAssetAndLiabilityPresenter implements AddAssetAndLiabilityOutput
         AssetAndLiability.RatePeriod ratePeriod = addAssetAndLiabilityOutputData.getRatePeriod();
         double interestRate = addAssetAndLiabilityOutputData.getInterestRate();
 
-        AssetAndLiability assetAndLiability = addAssetAndLiabilityOutputData.getAssetAndLiability();
+        List<AssetAndLiability> assetAndLiabilityList = addAssetAndLiabilityOutputData.getAssetAndLiabilityList();
 
         AddAssetAndLiabilityState addAssetAndLiabilityState = this.addAssetAndLiabilityViewModel.getState();
         addAssetAndLiabilityState.setPopupMessage(
@@ -30,7 +30,7 @@ public class AddAssetAndLiabilityPresenter implements AddAssetAndLiabilityOutput
                         + "\nInterest Rate: " + interestRate
         );
 
-        addAssetAndLiabilityState.addAssetAndLiabilityToList(assetAndLiability);
+        addAssetAndLiabilityState.setAllAssetAndLiabilityList(assetAndLiabilityList);
 
         this.addAssetAndLiabilityViewModel.firePropertyChange("asset/liability success");
     }
