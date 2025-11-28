@@ -53,11 +53,11 @@ public class AddAssetAndLiabilityInteractorTest {
                 assertEquals(0.01, addAssetAndLiabilityOutputData.getInterestRate());
                 assertEquals("MONTHLY", addAssetAndLiabilityOutputData.getRatePeriod().toString());
 
-                assertEquals(1105000.0, addAssetAndLiabilityOutputData.getAssetAndLiability().getCurrentAmount());
-                assertEquals("A1000", addAssetAndLiabilityOutputData.getAssetAndLiability().getID());
-                assertEquals("House 1", addAssetAndLiabilityOutputData.getAssetAndLiability().getName());
-                assertEquals("House 1", addAssetAndLiabilityOutputData.getAssetAndLiability().getName());
-                assertEquals("2020-10-10", addAssetAndLiabilityOutputData.getAssetAndLiability().getDateCreated().toString());
+                assertEquals(1105000.0, addAssetAndLiabilityOutputData.getAddedAssetAndLiability().getCurrentAmount());
+                assertEquals("A1000", addAssetAndLiabilityOutputData.getAddedAssetAndLiability().getID());
+                assertEquals("House 1", addAssetAndLiabilityOutputData.getAddedAssetAndLiability().getName());
+                assertEquals("House 1", addAssetAndLiabilityOutputData.getAddedAssetAndLiability().getName());
+                assertEquals("2020-10-10", addAssetAndLiabilityOutputData.getAddedAssetAndLiability().getDateCreated().toString());
             }
 
             @Override

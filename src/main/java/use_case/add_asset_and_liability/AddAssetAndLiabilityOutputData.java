@@ -10,18 +10,21 @@ public class AddAssetAndLiabilityOutputData {
     private double interestRate;
     private AssetAndLiability.RatePeriod ratePeriod;
     private List<AssetAndLiability> assetAndLiabilityList;
+    private AssetAndLiability addedAssetAndLiability;
 
     // Transaction of $amount added successfully to $accountNumber. New balance is $newBalance. Additional messages: $message
 
     public AddAssetAndLiabilityOutputData(AssetAndLiability.Type type,
                                           double initialAmount, double interestRate,
                                           AssetAndLiability.RatePeriod ratePeriod,
-                                          List<AssetAndLiability> assetAndLiabilityList) {
+                                          List<AssetAndLiability> assetAndLiabilityList,
+                                          AssetAndLiability assetAndLiability) {
         this.type = type;
         this.initialAmount = initialAmount;
         this.interestRate = interestRate;
         this.ratePeriod = ratePeriod;
         this.assetAndLiabilityList = assetAndLiabilityList;
+        this.addedAssetAndLiability = assetAndLiability;
     }
 
     public AssetAndLiability.Type getType() {
@@ -40,7 +43,11 @@ public class AddAssetAndLiabilityOutputData {
         return ratePeriod;
     }
 
-    public  List<AssetAndLiability> getAssetAndLiabilityList() {
+    public List<AssetAndLiability> getAssetAndLiabilityList() {
         return assetAndLiabilityList;
+    }
+
+    public AssetAndLiability getAddedAssetAndLiability() {
+        return addedAssetAndLiability;
     }
 }
