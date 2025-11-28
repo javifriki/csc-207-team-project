@@ -29,8 +29,8 @@ public class MonthlyReportInteractor implements MonthlyReportInputBoundary {
 
     @Override
     public void generateReport(MonthlyReportInputData monthlyReportInputData) throws IOException, InterruptedException {
-        int year = Integer.parseInt(MonthlyReportInputData.getYear());
-        int month = Integer.parseInt(MonthlyReportInputData.getMonth());
+        int year = MonthlyReportInputData.getYear();
+        int month = MonthlyReportInputData.getMonth();
 
         monthlyReportDAO.init(accountGateway);
         monthlyReportDAO.load(accountGateway);

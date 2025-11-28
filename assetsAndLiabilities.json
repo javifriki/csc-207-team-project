@@ -27,8 +27,8 @@
     "type": "ASSET"
   },
   "L1000": {
-    "interestRate": 0.01,
-    "dateCreated": "2025-11-25",
+    "interestRate": 0.05,
+    "dateCreated": "2025-11-27",
     "initialAmount": 100000,
     "name": "Loan",
     "ratePeriod": "MONTHLY",

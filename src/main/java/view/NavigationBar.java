@@ -27,6 +27,7 @@ public class NavigationBar extends JPanel {
         styleButton(monthlySummaryButton);
         styleButton(addAssetAndLiabilityButton);
         styleButton(assetAndLiabilityListButton);
+        styleButton(monthlyReportButton);
 
         // Add action listeners
         addTransactionButton.addActionListener(new ActionListener() {
