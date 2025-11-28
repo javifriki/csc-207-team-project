@@ -15,6 +15,7 @@ import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRa
 import interface_adaptor.monthly_summary.MonthlySummaryController;
 import interface_adaptor.monthly_summary.MonthlySummaryPresenter;
 import interface_adaptor.monthly_summary.MonthlySummaryViewModel;
+import interface_adaptor.month_transactions.MonthTransactionsController;
 import use_case.add_asset_and_liability.AddAssetAndLiabilityInputBoundary;
 import use_case.add_asset_and_liability.AddAssetAndLiabilityInteractor;
 import use_case.add_asset_and_liability.AddAssetAndLiabilityOutputBoundary;
@@ -26,6 +27,9 @@ import use_case.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateOutputB
 import use_case.monthly_summary.MonthlySummaryInputBoundary;
 import use_case.monthly_summary.MonthlySummaryInteractor;
 import use_case.monthly_summary.MonthlySummaryOutputBoundary;
+import use_case.month_transactions.MonthTransactionsInputBoundary;
+import use_case.month_transactions.MonthTransactionsInteractor;
+import use_case.month_transactions.MonthTransactionsOutputBoundary;
 import view.*;
 
 import javax.swing.*;
@@ -88,6 +92,14 @@ public class AppBuilder {
 
         MonthlySummaryController monthlySummaryController = new MonthlySummaryController(monthlySummaryInteractor);
         monthlySummaryView.setMonthlySummaryController(monthlySummaryController);
+
+        // Add month transactions use case for the monthly summary view
+        final MonthTransactionsOutputBoundary monthTransactionsOutputPresenter = monthlySummaryView.getTransactionPresenter();
+        final MonthTransactionsInputBoundary monthTransactionsInteractor = new MonthTransactionsInteractor(accountDataAccessObject, monthTransactionsOutputPresenter);
+
+        MonthTransactionsController monthTransactionsController = new MonthTransactionsController(monthTransactionsInteractor);
+        monthlySummaryView.setMonthTransactionsController(monthTransactionsController);
+
         return this;
     }
 
