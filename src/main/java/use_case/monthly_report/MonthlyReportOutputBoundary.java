@@ -1,7 +1,5 @@
 package use_case.monthly_report;
 
-import org.json.JSONObject;
-import use_case.add_transaction.AddTransactionOutputData;
 
 /**
  * Output Boundary for the Monthly Report Use Case.
@@ -9,4 +7,5 @@ import use_case.add_transaction.AddTransactionOutputData;
 
 public interface MonthlyReportOutputBoundary {
     void present(MonthlyReportOutputData outputData);
+    void presentError(String s);
 }
