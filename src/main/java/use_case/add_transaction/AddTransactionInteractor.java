@@ -31,7 +31,7 @@ public class AddTransactionInteractor implements AddTransactionInputBoundary {
             return;
         }
 
-        if (account.getAccountBalance() - transactionAmount < 0) {
+        if (account.getAccountBalance() - transactionAmount < 0 && transactionType.toString().equals("EXPENSE")) {
             addTransactionPresenter.prepareTransactionFailView("Insufficient funds in account " + accountNumber);
             return;
         }
