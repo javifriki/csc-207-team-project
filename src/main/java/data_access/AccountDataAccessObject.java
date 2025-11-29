@@ -184,4 +184,9 @@ public class AccountDataAccessObject implements AccountDataAccessInterface {
     public List<Account> getAllAccounts() {
         return new ArrayList<>(accountNumberToAccount.values());
     }
+
+    @Override
+    public List<String> getAllAccountNumbers() {
+        return new ArrayList<>(accountNumberToAccount.keySet());
+    }
 }

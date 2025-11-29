@@ -11,10 +11,10 @@ public class Main {
                 .addAddTransactionUseCase()
                 .addMonthlySummaryView()
                 .addMonthlySummaryUseCase()
+                .addAddAccountView()
+                .addAddAccountUseCase()
                 .addMonthlyReportView()
                 .addMonthlyReportUseCase()
-                .addCurrencyConverterView()
-                .addCurrencyConverterUseCase()
                 .build();
 
         application.pack();

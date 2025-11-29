@@ -18,13 +18,14 @@ public class NavigationBar extends JPanel {
 
         JButton addTransactionButton = new JButton("Add Transaction");
         JButton monthlySummaryButton = new JButton("Monthly Summary");
+        JButton addAccountButton = new JButton("Add Account");
         JButton monthlyReportButton = new JButton("Monthly Report");
-        JButton currencyConverterButton = new JButton("Currency Converter");
 
         // Style buttons
         styleButton(addTransactionButton);
         styleButton(monthlySummaryButton);
-        styleButton(currencyConverterButton);
+        styleButton(addAccountButton);
+        styleButton(monthlyReportButton);
 
         // Add action listeners
         addTransactionButton.addActionListener(new ActionListener() {
@@ -43,6 +44,14 @@ public class NavigationBar extends JPanel {
             }
         });
 
+        addAccountButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewManagerViewModel.setState("addAccount");
+                viewManagerViewModel.firePropertyChange("viewChange");
+            }
+        });
+
         monthlyReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -51,15 +60,10 @@ public class NavigationBar extends JPanel {
             }
         });
 
-        currencyConverterButton.addActionListener(e -> {
-            viewManagerViewModel.setState("currencyConverter");
-            viewManagerViewModel.firePropertyChange("viewChange");
-        });
-
         add(addTransactionButton);
         add(monthlySummaryButton);
+        add(addAccountButton);
         add(monthlyReportButton);
-        add(currencyConverterButton);
     }
 
     private void styleButton(JButton button) {

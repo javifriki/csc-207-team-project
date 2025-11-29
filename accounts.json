@@ -1,4 +1,27 @@
 {
+    "676767": {
+        "balance": 498,
+        "accountType": "CHECKING",
+        "transactionList": [
+            {
+                "transactionType": "INCOME",
+                "date": "2025-11-29",
+                "amount": 500,
+                "transactionCategory": "SALARY"
+            },
+            {
+                "transactionType": "EXPENSE",
+                "date": "2025-11-29",
+                "amount": 2,
+                "transactionCategory": "GROCERIES"
+            }
+        ]
+    },
+    "cookingmaybe": {
+        "balance": 0,
+        "accountType": "CREDIT",
+        "transactionList": []
+    },
     "ACC67890": {
         "balance": 5501,
         "accountType": "SAVINGS",
