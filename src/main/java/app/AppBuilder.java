@@ -125,14 +125,16 @@ public class AppBuilder {
         currencyConverterViewModel = new CurrencyConverterViewModel();
         currencyConverterView = new CurrencyConverterView(currencyConverterViewModel);
 
-        ViewWithNavigation nav =
+        ViewWithNavigation viewWithNav =
                 new ViewWithNavigation(currencyConverterView, viewManagerViewModel);
-        this.cardPanel.add(nav, currencyConverterView.getViewName());
+        this.cardPanel.add(viewWithNav, currencyConverterView.getViewName());
 
         return this;
     }
 
+
     public AppBuilder addCurrencyConverterUseCase() {
+
         CurrencyConverterPresenter presenter =
                 new CurrencyConverterPresenter(currencyConverterViewModel);
 
