@@ -13,6 +13,11 @@ import interface_adaptor.monthly_summary.MonthlySummaryController;
 import interface_adaptor.monthly_summary.MonthlySummaryPresenter;
 import interface_adaptor.monthly_summary.MonthlySummaryViewModel;
 import interface_adaptor.month_transactions.MonthTransactionsController;
+import interface_adaptor.currency_converter.CurrencyConverterController;
+import interface_adaptor.currency_converter.CurrencyConverterPresenter;
+import interface_adaptor.currency_converter.CurrencyConverterViewModel;
+import use_case.currency_converter.CurrencyConverterInteractor;
+import use_case.currency_converter.CurrencyRateFetcher;
 import use_case.add_transaction.AddTransactionInteractor;
 import use_case.add_transaction.AddTransactionOutputBoundary;
 import use_case.monthly_report.MonthlyReportInteractor;
@@ -40,6 +45,8 @@ public class AppBuilder {
     private MonthlySummaryViewModel monthlySummaryViewModel;
     private MonthlyReportView monthlyReportView;
     private MonthlyReportViewModel monthlyReportViewModel;
+    private CurrencyConverterView currencyConverterView;
+    private CurrencyConverterViewModel currencyConverterViewModel;
 
     final AccountDataAccessObject accountDataAccessObject = new AccountDataAccessObject("accounts.json");
 
@@ -113,6 +120,35 @@ public class AppBuilder {
         monthlyReportView.setMonthlyReportController(controller);
         return this;
     }
+
+    public AppBuilder addCurrencyConverterView() {
+        currencyConverterViewModel = new CurrencyConverterViewModel();
+        currencyConverterView = new CurrencyConverterView(currencyConverterViewModel);
+
+        ViewWithNavigation nav =
+                new ViewWithNavigation(currencyConverterView, viewManagerViewModel);
+        this.cardPanel.add(nav, currencyConverterView.getViewName());
+
+        return this;
+    }
+
+    public AppBuilder addCurrencyConverterUseCase() {
+        CurrencyConverterPresenter presenter =
+                new CurrencyConverterPresenter(currencyConverterViewModel);
+
+        CurrencyRateFetcher fetcher = new CurrencyRateFetcher();
+
+        CurrencyConverterInteractor interactor =
+                new CurrencyConverterInteractor(presenter, fetcher);
+
+        CurrencyConverterController controller =
+                new CurrencyConverterController(interactor);
+
+        currencyConverterView.setCurrencyConverterController(controller);
+
+        return this;
+    }
+
 
     public JFrame build() {
         JFrame application = new JFrame("Financial Portfolio App");

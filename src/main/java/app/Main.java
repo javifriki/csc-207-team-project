@@ -13,6 +13,8 @@ public class Main {
                 .addMonthlySummaryUseCase()
                 .addMonthlyReportView()
                 .addMonthlyReportUseCase()
+                .addCurrencyConverterView()
+                .addCurrencyConverterUseCase()
                 .build();
 
         application.pack();
