@@ -40,8 +40,8 @@ public class AddAccountView extends JPanel implements PropertyChangeListener {
 
         JLabel accountTypeLabel = new JLabel("Account Type");
         JPanel accountTypePanel = new JPanel();
-        accountTypePanel.add(accountIdLabel);
-        accountTypeLabel.add(accountTypeDropDown);
+        accountTypePanel.add(accountTypeLabel);
+        accountTypePanel.add(accountTypeDropDown);
 
         JPanel addAccountButtonPanel = new JPanel();
         addAccountButtonPanel.add(addAccountButton);

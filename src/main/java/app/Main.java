@@ -10,6 +10,8 @@ public class Main {
                 .addAddTransactionUseCase()
                 .addMonthlySummaryView()
                 .addMonthlySummaryUseCase()
+                .addAddAccountView()
+                .addAddAccountUseCase()
                 .build();
 
         application.pack();

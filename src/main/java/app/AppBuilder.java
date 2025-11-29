@@ -2,21 +2,23 @@ package app;
 
 import data_access.AccountDataAccessObject;
 import interface_adaptor.ViewManagerViewModel;
+import interface_adaptor.add_account.AddAccountController;
+import interface_adaptor.add_account.AddAccountPresenter;
+import interface_adaptor.add_account.AddAccountViewModel;
 import interface_adaptor.add_transaction.AddTransactionController;
 import interface_adaptor.add_transaction.AddTransactionPresenter;
 import interface_adaptor.add_transaction.AddTransactionViewModel;
 import interface_adaptor.monthly_summary.MonthlySummaryController;
 import interface_adaptor.monthly_summary.MonthlySummaryPresenter;
 import interface_adaptor.monthly_summary.MonthlySummaryViewModel;
+import use_case.account.AddAccountInteractor;
+import use_case.account.AddAccountOutputBoundary;
 import use_case.add_transaction.AddTransactionInteractor;
 import use_case.add_transaction.AddTransactionOutputBoundary;
 import use_case.monthly_summary.MonthlySummaryInputBoundary;
 import use_case.monthly_summary.MonthlySummaryInteractor;
 import use_case.monthly_summary.MonthlySummaryOutputBoundary;
-import view.AddTransactionView;
-import view.MonthlySummaryView;
-import view.ViewManager;
-import view.ViewWithNavigation;
+import view.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,6 +33,8 @@ public class AppBuilder {
     private AddTransactionViewModel addTransactionViewModel;
     private MonthlySummaryView monthlySummaryView;
     private MonthlySummaryViewModel monthlySummaryViewModel;
+    private AddAccountView addAccountView;
+    private AddAccountViewModel addAccountViewModel;
 
     final AccountDataAccessObject accountDataAccessObject = new AccountDataAccessObject("accounts.json");
 
@@ -71,6 +75,25 @@ public class AppBuilder {
 
         MonthlySummaryController monthlySummaryController = new MonthlySummaryController(monthlySummaryInteractor);
         monthlySummaryView.setMonthlySummaryController(monthlySummaryController);
+        return this;
+    }
+
+    public AppBuilder addAddAccountView() {
+        addAccountViewModel = new AddAccountViewModel();
+        addAccountView = new AddAccountView(addAccountViewModel);
+
+        ViewWithNavigation viewWithNav = new ViewWithNavigation(addAccountView, viewManagerViewModel);
+        this.cardPanel.add(viewWithNav, addAccountView.getViewName());
+
+        return this;
+    }
+
+    public AppBuilder addAddAccountUseCase() {
+        final AddAccountOutputBoundary addAccountOutputPresenter = new AddAccountPresenter(addAccountViewModel);
+        final AddAccountInteractor addAccountInteractor = new AddAccountInteractor(accountDataAccessObject, addAccountOutputPresenter);
+
+        AddAccountController addAccountController = new AddAccountController(addAccountInteractor);
+        addAccountView.setAddAccountController(addAccountController);
         return this;
     }
 
