@@ -1,5 +1,5 @@
 package entity.currency_converter;
-
+//i don't know if it's required but without it was not working
 public class CurrencyConversionRequest {
     private final double amount;
     private final String fromCurrency;
