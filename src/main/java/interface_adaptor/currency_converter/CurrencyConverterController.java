@@ -8,6 +8,7 @@ public class CurrencyConverterController {
 
     public CurrencyConverterController(CurrencyConverterInputBoundary interactor) {
         this.interactor = interactor;
+
     }
 
     public void convert(double amount, String fromCurrency, String toCurrency) {
