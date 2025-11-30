@@ -20,6 +20,8 @@ public class Main {
                 .addMonthlyReportUseCase()
                 .addCurrencyConverterView()
                 .addCurrencyConverterUseCase()
+                .addNetWorthTableView()
+                .addNetWorthTableUseCase()
                 .build();
 
         application.pack();

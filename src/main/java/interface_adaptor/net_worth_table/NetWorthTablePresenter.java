@@ -18,15 +18,15 @@ public class NetWorthTablePresenter implements NetWorthTableOutputBoundary {
     public void present(NetWorthTableOutputData netWorthTableOutputData) {
         List<NetWorthTableRow> assetRows = new ArrayList<>();
         for (AssetAndLiability asset: netWorthTableOutputData.getAllAssets()) {
-            if (asset.getAmount() >= 0) {
-                assetRows.add(new NetWorthTableRow(asset.getName(), asset.getAmount()));
+            if (asset.getCurrentAmount() >= 0) {
+                assetRows.add(new NetWorthTableRow(asset.getName(), asset.getCurrentAmount()));
             }
         }
 
         List<NetWorthTableRow> liabilityRows = new ArrayList<>();
         for (AssetAndLiability liability : netWorthTableOutputData.getAllLiabilities()) {
-            if (liability.getAmount() >= 0) {
-                liabilityRows.add(new NetWorthTableRow(liability.getName(), liability.getAmount()));
+            if (liability.getCurrentAmount() >= 0) {
+                liabilityRows.add(new NetWorthTableRow(liability.getName(), liability.getCurrentAmount()));
             }
         }
 
