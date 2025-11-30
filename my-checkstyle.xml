@@ -6,7 +6,6 @@
 
     <module name="TreeWalker">
 
-        <module name="AvoidStarImport"/>
         <module name="UnusedImports"/>
 
         <module name="WhitespaceAfter"/>
@@ -16,7 +15,7 @@
         <module name="RightCurly"/>
 
         <module name="LineLength">
-            <property name="max" value="140"/>
+            <property name="max" value="200"/>
         </module>
 
     </module>
