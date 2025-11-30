@@ -1,4 +1,28 @@
 {
+    "creditAccount": {
+        "balance": -3000,
+        "accountType": "CREDIT",
+        "transactionList": [
+            {
+                "transactionType": "INCOME",
+                "date": "2025-11-29",
+                "amount": 2000,
+                "transactionCategory": "SALARY"
+            },
+            {
+                "transactionType": "INCOME",
+                "date": "2025-11-29",
+                "amount": 5000,
+                "transactionCategory": "DINING"
+            },
+            {
+                "transactionType": "EXPENSE",
+                "date": "2025-11-29",
+                "amount": 10000,
+                "transactionCategory": "GROCERIES"
+            }
+        ]
+    },
     "676767": {
         "balance": 498,
         "accountType": "CHECKING",
