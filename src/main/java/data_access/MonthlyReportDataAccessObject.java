@@ -2,10 +2,10 @@ package data_access;
 
 import entity.Account;
 import entity.Transaction;
+import org.json.JSONObject;
 import use_case.account.AccountDataAccessInterface;
 
-import org.json.JSONObject;
-import java.util.*;
+import java.util.List;
 
 public class MonthlyReportDataAccessObject {
 
@@ -23,30 +23,6 @@ public class MonthlyReportDataAccessObject {
     );
 
     public void init(AccountDataAccessInterface accountGateway) {
-
-        int currentYear = java.time.LocalDate.now().getYear();
-        String yearKey = String.valueOf(currentYear);
-
-        JSONObject yearObj = new JSONObject();
-        yearTransactions.put(yearKey, yearObj);
-
-        for (int month = 1; month <= 12; month++) {
-            JSONObject monthObj = new JSONObject();
-
-            JSONObject graph = new JSONObject();
-            for (int day = 1; day <= 31; day++) {
-                graph.put(String.valueOf(day), 0.0);
-            }
-            monthObj.put("graph_data", graph);
-
-            JSONObject categoryTotals = new JSONObject();
-            for (String cat : PIE_CATEGORIES) {
-                categoryTotals.put(cat, 0.0);
-            }
-            monthObj.put("category_totals", categoryTotals);
-
-            yearObj.put(String.valueOf(month), monthObj);
-        }
     }
 
     public void load(AccountDataAccessInterface accountGateway) {
@@ -61,30 +37,90 @@ public class MonthlyReportDataAccessObject {
                 double amount = t.getTransactionAmount();
                 String category = t.getTransactionCategory().toString();
 
-                JSONObject monthObj = yearTransactions
-                        .getJSONObject(String.valueOf(year))
-                        .getJSONObject(String.valueOf(month));
-
+                JSONObject monthObj = getMonthData(year, month);
 
                 JSONObject graphData = monthObj.getJSONObject("graph_data");
                 double currentVal = graphData.getDouble(String.valueOf(day));
-                graphData.put(String.valueOf(day), currentVal + amount);
 
-                JSONObject catTotals = monthObj.getJSONObject("category_totals");
-                double catVal = catTotals.optDouble(category, 0.0);
-                catTotals.put(category, catVal + amount);
+                // Line graph: income adds, expense subtracts
+                if (t.getTransactionType() == Transaction.TransactionType.EXPENSE) {
+                    graphData.put(String.valueOf(day), currentVal - Math.abs(amount));
+                } else {
+                    graphData.put(String.valueOf(day), currentVal + Math.abs(amount));
+                }
+
+                // Pie chart: expenses only
+                if (t.getTransactionType() == Transaction.TransactionType.EXPENSE) {
+                    JSONObject catTotals = monthObj.getJSONObject("category_totals");
+                    double catVal = catTotals.optDouble(category, 0.0);
+                    catTotals.put(category, catVal + Math.abs(amount));
+                }
             }
         }
     }
 
-    public JSONObject getYearData(int year) {
-        return yearTransactions.getJSONObject(String.valueOf(year));
+    public static JSONObject getMonthData(int year, int month) {
+        String yearKey = String.valueOf(year);
+        String monthKey = String.valueOf(month);
+
+        if (!yearTransactions.has(yearKey)) {
+            initializeEmptyYear(year);
+        }
+
+        JSONObject yearObj = yearTransactions.getJSONObject(yearKey);
+
+        if (!yearObj.has(monthKey)) {
+            initializeEmptyMonth(yearObj, month);
+        }
+
+        return yearObj.getJSONObject(monthKey);
     }
 
-    public static JSONObject getMonthData(int year, int month) {
-        return yearTransactions
-                .getJSONObject(String.valueOf(year))
-                .getJSONObject(String.valueOf(month));
+    private static void initializeEmptyYear(int year) {
+        JSONObject yearObj = new JSONObject();
+
+        for (int month = 1; month <= 12; month++) {
+            initializeEmptyMonth(yearObj, month);
+        }
+
+        yearTransactions.put(String.valueOf(year), yearObj);
+    }
+
+    private static void initializeEmptyMonth(JSONObject yearObj, int month) {
+        JSONObject monthObj = new JSONObject();
+
+        JSONObject graph = new JSONObject();
+        for (int day = 1; day <= 31; day++) {
+            graph.put(String.valueOf(day), 0.0);
+        }
+        monthObj.put("graph_data", graph);
+
+        JSONObject categoryTotals = new JSONObject();
+        for (String cat : PIE_CATEGORIES) {
+            categoryTotals.put(cat, 0.0);
+        }
+        monthObj.put("category_totals", categoryTotals);
+
+        yearObj.put(String.valueOf(month), monthObj);
+    }
+
+    public static double getOpeningBalance(int year, int month) {
+        if (month <= 1) {
+            return 0.0;
+        }
+
+        // Opening balance of this month = opening of previous month + net change in previous month
+        double prevOpening = getOpeningBalance(year, month - 1);
+
+        JSONObject prevMonth = getMonthData(year, month - 1);
+        JSONObject prevGraph = prevMonth.getJSONObject("graph_data");
+
+        double deltaPrevMonth = 0.0;
+        for (int day = 1; day <= 31; day++) {
+            String key = String.valueOf(day);
+            deltaPrevMonth += prevGraph.optDouble(key, 0.0);
+        }
+
+        return prevOpening + deltaPrevMonth;
     }
 }
-

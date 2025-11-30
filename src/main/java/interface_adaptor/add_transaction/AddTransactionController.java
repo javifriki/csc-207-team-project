@@ -1,6 +1,7 @@
 package interface_adaptor.add_transaction;
 
 import entity.Transaction;
+import use_case.add_transaction.AddTransactionInputBoundary;
 import use_case.add_transaction.AddTransactionInputData;
 import use_case.add_transaction.AddTransactionInteractor;
 
@@ -9,11 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AddTransactionController {
-    private final AddTransactionInteractor addTransactionInteractor;
+    private final AddTransactionInputBoundary addTransactionInteractor;
     private Map<String, Transaction.TransactionType> transactionTypeHashMap = new HashMap<>();
     private Map<String, Transaction.TransactionCategory> transactionCategoryHashMap = new HashMap<>();
 
-    public AddTransactionController(AddTransactionInteractor addTransactionInteractor) {
+    public AddTransactionController(AddTransactionInputBoundary addTransactionInteractor) {
         this.addTransactionInteractor = addTransactionInteractor;
 
         for (Transaction.TransactionType type : Transaction.TransactionType.values()) {
