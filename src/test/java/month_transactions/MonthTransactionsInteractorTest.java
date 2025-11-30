@@ -41,6 +41,11 @@ class MonthTransactionsInteractorTest {
         public List<Account> getAllAccounts() {
             return new ArrayList<>(accounts);
         }
+
+        @Override
+        public List<String> getAllAccountNumbers() {
+            return List.of();
+        }
     }
 
     static class InMemoryMonthTransactionsPresenter implements MonthTransactionsOutputBoundary {
