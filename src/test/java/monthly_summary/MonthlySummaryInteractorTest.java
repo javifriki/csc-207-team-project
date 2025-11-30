@@ -44,6 +44,11 @@ class MonthlySummaryInteractorTest {
         public List<Account> getAllAccounts() {
             return new ArrayList<>(accounts);
         }
+
+        @Override
+        public List<String> getAllAccountNumbers() {
+            return List.of();
+        }
     }
 
     static class InMemoryMonthlySummaryPresenter implements MonthlySummaryOutputBoundary {
