@@ -35,8 +35,6 @@ public class NetWorthTableInteractor implements  NetWorthTableInputBoundary {
                         allLiabilities.add(capital);
                         totalLiabilities += capital.getCurrentAmount();
                         break;
-                    default:
-                        throw new IllegalArgumentException("Invalid capital type");
                 }
             }
         }
