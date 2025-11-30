@@ -17,13 +17,17 @@ public class NetWorthTablePresenter implements NetWorthTableOutputBoundary {
 
     public void present(NetWorthTableOutputData netWorthTableOutputData) {
         List<NetWorthTableRow> assetRows = new ArrayList<>();
-        for (AssetAndLiability a : netWorthTableOutputData.getAllAssets()) {
-            assetRows.add(new NetWorthTableRow(a.getName(), a.getAmount()));
+        for (AssetAndLiability asset: netWorthTableOutputData.getAllAssets()) {
+            if (asset.getAmount() >= 0) {
+                assetRows.add(new NetWorthTableRow(asset.getName(), asset.getAmount()));
+            }
         }
 
         List<NetWorthTableRow> liabilityRows = new ArrayList<>();
-        for (AssetAndLiability l : netWorthTableOutputData.getAllLiabilities()) {
-            liabilityRows.add(new NetWorthTableRow(l.getName(), l.getAmount()));
+        for (AssetAndLiability liability : netWorthTableOutputData.getAllLiabilities()) {
+            if (liability.getAmount() >= 0) {
+                liabilityRows.add(new NetWorthTableRow(liability.getName(), liability.getAmount()));
+            }
         }
 
         NetWorthTableState newState = new NetWorthTableState();
@@ -34,9 +38,5 @@ public class NetWorthTablePresenter implements NetWorthTableOutputBoundary {
         newState.setNetWorth(netWorthTableOutputData.getNetWorth());
 
         viewModel.setState(newState);
-    }
-
-    public NetWorthTableViewModel getViewModel() {
-        return viewModel;
     }
 }

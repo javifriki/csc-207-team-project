@@ -13,7 +13,6 @@ public class User {
     private final List<AssetAndLiability> liabilitiesList;
 
     public User(String userID, String password, String name) {
-        //will refactor sometime
         this.userID = userID;
         this.password = password;
         this.name = name;
