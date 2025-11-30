@@ -17,10 +17,15 @@ public class CurrencyConverterView extends JPanel {
 
 
     private final JTextField amountField = new JTextField();
+    private final String[] currencies = {
+            "CAD", "USD", "EUR", "GBP", "JPY", "CNY", "AUD", "CHF",
+            "HKD", "SGD", "NZD", "MXN", "INR", "BRL", "ZAR", "KRW",
+            "SEK", "NOK", "DKK", "PLN", "RUB", "TRY", "THB", "MYR"
+    };
     private final JComboBox<String> fromCurrency =
-            new JComboBox<>(new String[]{"USD", "CAD", "EUR"});
+            new JComboBox<>(currencies);
     private final JComboBox<String> toCurrency =
-            new JComboBox<>(new String[]{"USD", "CAD", "EUR"});
+            new JComboBox<>(currencies);
     private final JLabel resultLabel = new JLabel("");
 
 
