@@ -9,7 +9,7 @@ import java.util.List;
 
 public class NetWorthTablePresenter implements NetWorthTableOutputBoundary {
 
-    private  NetWorthTableViewModel viewModel;
+    private final NetWorthTableViewModel viewModel;
 
     public NetWorthTablePresenter(NetWorthTableViewModel viewModel) {
         this.viewModel = viewModel;
