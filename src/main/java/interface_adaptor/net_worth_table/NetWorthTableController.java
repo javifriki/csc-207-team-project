@@ -10,7 +10,7 @@ public class NetWorthTableController {
         this.interactor = interactor;
     }
 
-    public void getNetWorthTable() {
+    public void execute() {
         NetWorthTableInputData inputData = new NetWorthTableInputData();
         interactor.execute(inputData);
     }

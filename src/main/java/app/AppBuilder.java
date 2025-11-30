@@ -25,6 +25,9 @@ import interface_adaptor.monthly_summary.MonthlySummaryViewModel;
 import interface_adaptor.currency_converter.CurrencyConverterController;
 import interface_adaptor.currency_converter.CurrencyConverterPresenter;
 import interface_adaptor.currency_converter.CurrencyConverterViewModel;
+import interface_adaptor.net_worth_table.NetWorthTableController;
+import interface_adaptor.net_worth_table.NetWorthTablePresenter;
+import interface_adaptor.net_worth_table.NetWorthTableViewModel;
 import use_case.currency_converter.CurrencyConverterInteractor;
 import use_case.currency_converter.CurrencyRateFetcher;
 import use_case.account.AddAccountInteractor;
@@ -45,6 +48,8 @@ import use_case.monthly_summary.MonthlySummaryOutputBoundary;
 import use_case.month_transactions.MonthTransactionsInputBoundary;
 import use_case.month_transactions.MonthTransactionsInteractor;
 import use_case.month_transactions.MonthTransactionsOutputBoundary;
+import use_case.net_worth_table.NetWorthTableInteractor;
+import use_case.net_worth_table.NetWorthTableOutputBoundary;
 import view.*;
 
 import javax.swing.*;
@@ -71,6 +76,9 @@ public class AppBuilder {
     private MonthlyReportViewModel monthlyReportViewModel;
     private CurrencyConverterView currencyConverterView;
     private CurrencyConverterViewModel currencyConverterViewModel;
+    private NetWorthTableView netWorthTableView;
+    private NetWorthTableViewModel netWorthTableViewModel;
+
 
     final AccountDataAccessObject accountDataAccessObject = new AccountDataAccessObject("accounts.json");
     final AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject =
@@ -251,6 +259,27 @@ public class AppBuilder {
 
         return this;
     }
+
+    public AppBuilder addNetWorthTableView() {
+        this.netWorthTableViewModel = new NetWorthTableViewModel();
+        this.netWorthTableView = new NetWorthTableView(this.netWorthTableViewModel);
+
+        ViewWithNavigation viewWithNav = new ViewWithNavigation(this.netWorthTableView, viewManagerViewModel);
+        this.cardPanel.add(viewWithNav, this.netWorthTableView.getViewName());
+
+        return this;
+    }
+
+    public AppBuilder addNetWorthTableUseCase() {
+        final NetWorthTableOutputBoundary netWorthTablePresenter = new NetWorthTablePresenter(this.netWorthTableViewModel);
+        final NetWorthTableInteractor netWorthTableInteractor = new NetWorthTableInteractor(assetAndLiabilityDataAccessObject, netWorthTablePresenter);
+
+        NetWorthTableController netWorthTableController = new NetWorthTableController(netWorthTableInteractor);
+        this.netWorthTableView.setNetWorthTableController(netWorthTableController);
+
+        return this;
+    }
+
 
 
     public JFrame build() {
