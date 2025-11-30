@@ -13,7 +13,7 @@ public class CurrencyConverterPresenter implements CurrencyConverterOutputBounda
 
     @Override
     public void present(CurrencyConverterOutputData outputData) {
-        String text = "Converted Amount: " + outputData.convertedAmount;
+        String text = "Converted Amount: " + String.format("%.3f", outputData.convertedAmount);
         viewModel.setResult(text);
         viewModel.firePropertyChanged();
     }
