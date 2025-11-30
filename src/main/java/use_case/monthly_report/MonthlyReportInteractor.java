@@ -16,8 +16,6 @@ public class MonthlyReportInteractor implements MonthlyReportInputBoundary {
     private final MonthlyReportOutputBoundary presenter;
     private final AccountDataAccessInterface accountGateway;
 
-    private boolean initialized = false;
-
     public MonthlyReportInteractor(MonthlyReportDataAccessObject monthlyReportDAO,
                                    MonthlyReportOutputBoundary presenter,
                                    AccountDataAccessInterface accountGateway) {
@@ -32,11 +30,9 @@ public class MonthlyReportInteractor implements MonthlyReportInputBoundary {
             int year = inputData.getYear();
             int month = inputData.getMonth();
 
-            if (!initialized) {
-                monthlyReportDAO.init(accountGateway);
-                monthlyReportDAO.load(accountGateway);
-                initialized = true;
-            }
+            monthlyReportDAO.init(accountGateway);
+            monthlyReportDAO.load(accountGateway);
+
 
             BufferedImage line = MonthlyReportAPI.generateLineChart(year, month);
             BufferedImage pie  = MonthlyReportAPI.generatePieChart(year, month);
