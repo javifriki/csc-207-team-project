@@ -29,11 +29,11 @@ public class NetWorthTableInteractor implements  NetWorthTableInputBoundary {
                 switch (capital.getType()) {
                     case ASSET:
                         allAssets.add(capital);
-                        totalAssets += capital.getAmount();
+                        totalAssets += capital.getCurrentAmount();
                         break;
                     case LIABILITY:
                         allLiabilities.add(capital);
-                        totalLiabilities += capital.getAmount();
+                        totalLiabilities += capital.getCurrentAmount();
                         break;
                     default:
                         throw new IllegalArgumentException("Invalid capital type");

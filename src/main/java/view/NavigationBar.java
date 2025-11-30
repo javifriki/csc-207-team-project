@@ -18,6 +18,8 @@ public class NavigationBar extends JPanel {
 
         JButton addTransactionButton = new JButton("Add Transaction");
         JButton monthlySummaryButton = new JButton("Monthly Summary");
+        JButton addAssetAndLiabilityButton = new JButton("Add Asset/Liability");
+        JButton assetAndLiabilityListButton = new JButton("Asset/Liability List");
         JButton addAccountButton = new JButton("Add Account");
         JButton monthlyReportButton = new JButton("Monthly Report");
         JButton currencyConverterButton = new JButton("Currency Converter");
@@ -25,6 +27,9 @@ public class NavigationBar extends JPanel {
         // Style buttons
         styleButton(addTransactionButton);
         styleButton(monthlySummaryButton);
+        styleButton(addAssetAndLiabilityButton);
+        styleButton(assetAndLiabilityListButton);
+        styleButton(monthlyReportButton);
         styleButton(addAccountButton);
         styleButton(monthlyReportButton);
         styleButton(currencyConverterButton);
@@ -42,6 +47,22 @@ public class NavigationBar extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 viewManagerViewModel.setState("monthlySummary");
+                viewManagerViewModel.firePropertyChange("viewChange");
+            }
+        });
+
+        addAssetAndLiabilityButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewManagerViewModel.setState("addAssetAndLiability");
+                viewManagerViewModel.firePropertyChange("viewChange");
+            }
+        });
+
+        assetAndLiabilityListButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewManagerViewModel.setState("assetAndLiabilityApplyRate");
                 viewManagerViewModel.firePropertyChange("viewChange");
             }
         });
@@ -70,6 +91,8 @@ public class NavigationBar extends JPanel {
 
         add(addTransactionButton);
         add(monthlySummaryButton);
+        add(addAssetAndLiabilityButton);
+        add(assetAndLiabilityListButton);
         add(addAccountButton);
         add(monthlyReportButton);
         add(currencyConverterButton);
