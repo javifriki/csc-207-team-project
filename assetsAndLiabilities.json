@@ -8,6 +8,15 @@
     "currentAmount": 29090,
     "type": "LIABILITY"
   },
+  "L1001": {
+    "interestRate": 0.01,
+    "dateCreated": "2024-11-29",
+    "initialAmount": 100000,
+    "name": "Loan with rate applied",
+    "ratePeriod": "MONTHLY",
+    "currentAmount": 112682.5,
+    "type": "LIABILITY"
+  },
   "A1000": {
     "interestRate": 0.04,
     "dateCreated": "2025-11-25",

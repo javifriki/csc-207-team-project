@@ -145,16 +145,19 @@ public class AssetAndLiabilityApplyRateInteractorTest {
         assetAndLiabilityApplyRateInteractor.execute(assetAndLiabilityApplyRateInputData);
 
         // Check if rate apply works
+        int months1 = Period.between(LocalDate.now(), assetAndLiability1.getDateCreated()).getMonths() + Period.between(LocalDate.now(), assetAndLiability1.getDateCreated()).getYears() * 12;
+        int months2 = Period.between(LocalDate.now(), assetAndLiability2.getDateCreated()).getMonths() + Period.between(LocalDate.now(), assetAndLiability2.getDateCreated()).getYears() * 12;
+
         assertEquals(
-                1105000.0 * Math.pow(1.01, Math.abs(Period.between(LocalDate.now(), assetAndLiability1.getDateCreated()).getMonths())),
+                Math.round(1105000.0 * Math.pow(1.01, Math.abs(months1)) * 100.0) / 100.0,
                 assetAndLiabilityDataAccessObject.getAssetAndLiability("A1000").getCurrentAmount()
         );
         assertEquals(
-                200000.0 * Math.pow(1.04, Math.abs((Period.between(LocalDate.now(), assetAndLiability2.getDateCreated()).getMonths() / 3))),
+                Math.round(200000.0 * Math.pow(1.04, Math.abs((months2) / 3)) * 100.0) / 100.0,
                 assetAndLiabilityDataAccessObject.getAssetAndLiability("L1000").getCurrentAmount()
         );
         assertEquals(
-                30000.0 * Math.pow(1.08, Math.abs(Period.between(LocalDate.now(), assetAndLiability3.getDateCreated()).getYears())),
+                Math.round(30000.0 * Math.pow(1.08, Math.abs(Period.between(LocalDate.now(), assetAndLiability3.getDateCreated()).getYears())) * 100.0) / 100.0,
                 assetAndLiabilityDataAccessObject.getAssetAndLiability("A1001").getCurrentAmount()
         );
 

@@ -34,9 +34,9 @@ public class AssetAndLiabilityApplyRateInteractor implements AssetAndLiabilityAp
             AssetAndLiability.RatePeriod ratePeriod = assetAndLiability.getRatePeriod();
 
             if (ratePeriod == AssetAndLiability.RatePeriod.MONTHLY) {
-                assetAndLiability.applyRate(Math.abs(period.getMonths()));
+                assetAndLiability.applyRate(Math.abs(period.getMonths()) + Math.abs(period.getYears() * 12));
             } else if (ratePeriod == AssetAndLiability.RatePeriod.QUARTERLY) {
-                assetAndLiability.applyRate((Math.abs(period.getMonths())) / 3);
+                assetAndLiability.applyRate((Math.abs(period.getMonths()) + Math.abs(period.getYears() * 12)) / 3);
             } else {
                 assetAndLiability.applyRate(Math.abs(period.getYears()));
             }

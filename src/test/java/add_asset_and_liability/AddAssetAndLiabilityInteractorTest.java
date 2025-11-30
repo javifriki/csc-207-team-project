@@ -178,7 +178,7 @@ public class AddAssetAndLiabilityInteractorTest {
 
         AddAssetAndLiabilityInteractor addAssetAndLiabilityInteractor =
                 new AddAssetAndLiabilityInteractor(assetAndLiabilityDataAccessObject, addAssetAndLiabilityPresenter);
-        addAssetAndLiabilityInteractor.execute(addAssetAndLiabilityInputData2);
+        addAssetAndLiabilityInteractor.execute(addAssetAndLiabilityInputData1);
         String errorMessage = addAssetAndLiabilityInteractor.execute(addAssetAndLiabilityInputData2);
 
         assertEquals("\nID already in use, choose another ID.", errorMessage);
