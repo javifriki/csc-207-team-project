@@ -80,10 +80,16 @@ public class AddAssetAndLiabilityView extends JPanel implements PropertyChangeLi
                 String name = nameText.getText();
                 String type = (String) assetAndLiabilityTypeDropDown.getSelectedItem();
                 String ID = IDText.getText();
-                double initialAmount = Double.parseDouble(initialAmountText.getText());
-                String date = LocalDate.now().toString();
+                double initialAmount = 0;
+                if (!initialAmountText.getText().isEmpty()) {
+                    initialAmount = Double.parseDouble(initialAmountText.getText());
+                }
+                LocalDate date = LocalDate.now();
                 String ratePeriod = (String) assetAndLiabilityRatePeriodDropDown.getSelectedItem();
-                double interestRate = Double.parseDouble(interestRateText.getText());
+                double interestRate = 0;
+                if (!interestRateText.getText().isEmpty()) {
+                    interestRate = Double.parseDouble(interestRateText.getText());
+                }
 
                 addAssetAndLiabilityController.execute(
                         name,

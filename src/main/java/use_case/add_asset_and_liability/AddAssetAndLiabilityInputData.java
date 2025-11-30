@@ -5,17 +5,17 @@ import entity.AssetAndLiability;
 import java.time.LocalDate;
 
 public class AddAssetAndLiabilityInputData {
-    private final AssetAndLiability.Type type;
+    private final String type;
     private final String name;
     private final String ID;
     private final LocalDate dateCreated;
     private final double initialAmount;
     private final double interestRate;
-    private final AssetAndLiability.RatePeriod ratePeriod;
+    private final String ratePeriod;
 
-    public AddAssetAndLiabilityInputData(String name, AssetAndLiability.Type type, String ID,
+    public AddAssetAndLiabilityInputData(String name, String type, String ID,
                                          LocalDate dateCreated, double initialAmount, double interestRate,
-                                         AssetAndLiability.RatePeriod ratePeriod) {
+                                         String ratePeriod) {
         this.name = name;
         this.type = type;
         this.initialAmount = initialAmount;
@@ -29,7 +29,7 @@ public class AddAssetAndLiabilityInputData {
 
     public String getName() { return name; }
 
-    public AssetAndLiability.Type getType() { return type; }
+    public String getType() { return type; }
 
     public String getID() { return ID; }
 
@@ -41,7 +41,7 @@ public class AddAssetAndLiabilityInputData {
         return dateCreated;
     }
 
-    public AssetAndLiability.RatePeriod getRatePeriod() {
+    public String getRatePeriod() {
         return ratePeriod;
     }
 }

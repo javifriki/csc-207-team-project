@@ -2,5 +2,4 @@ package use_case.asset_and_liability_apply_rate;
 
 public interface AssetAndLiabilityApplyRateOutputBoundary {
     void prepareAssetAndLiabilitySuccessView (AssetAndLiabilityApplyRateOutputData assetAndLiabilityApplyRateOutputData);
-    void prepareAssetAndLiabilityFailView (String errorMessage);
 }

@@ -26,32 +26,32 @@ public class AssetAndLiabilityApplyRateInteractorTest {
         // We first add new assets and liabilities into the DAO
         AddAssetAndLiabilityInputData addAssetAndLiabilityInputData1 = new AddAssetAndLiabilityInputData(
                 "House 1",
-                AssetAndLiability.Type.ASSET,
+                AssetAndLiability.Type.ASSET.toString(),
                 "A1000",
                 LocalDate.of(2025, 06, 01),
                 1105000.0,
                 0.01,
-                AssetAndLiability.RatePeriod.MONTHLY
+                AssetAndLiability.RatePeriod.MONTHLY.toString()
         );
 
         AddAssetAndLiabilityInputData addAssetAndLiabilityInputData2 = new AddAssetAndLiabilityInputData(
                 "Student Loan",
-                AssetAndLiability.Type.LIABILITY,
+                AssetAndLiability.Type.LIABILITY.toString(),
                 "L1000",
                 LocalDate.of(2022, 01, 01),
                 200000.0,
                 0.04,
-                AssetAndLiability.RatePeriod.QUARTERLY
+                AssetAndLiability.RatePeriod.QUARTERLY.toString()
         );
 
         AddAssetAndLiabilityInputData addAssetAndLiabilityInputData3 = new AddAssetAndLiabilityInputData(
                 "Dividends",
-                AssetAndLiability.Type.ASSET,
+                AssetAndLiability.Type.ASSET.toString(),
                 "A1001",
                 LocalDate.of(2020, 01, 01),
                 30000.0,
                 0.08,
-                AssetAndLiability.RatePeriod.ANNUALLY
+                AssetAndLiability.RatePeriod.ANNUALLY.toString()
         );
 
         // Then, we save the assets/liabilities into the temporary DAO
@@ -136,11 +136,6 @@ public class AssetAndLiabilityApplyRateInteractorTest {
                 for (int i = 0; i < assetAndLiabilityList.size(); i++) {
                     assertEquals(IDs[i], assetAndLiabilityList.get(i).getID());
                 }
-            }
-
-            @Override
-            public void prepareAssetAndLiabilityFailView(String errorMessage) {
-                fail("Unexpected fail");
             }
         };
 

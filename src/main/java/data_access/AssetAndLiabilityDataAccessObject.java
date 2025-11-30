@@ -142,4 +142,9 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
         return new ArrayList<>(assetAndLiabilityIDToAssetAndLiability.values());
     }
 
+    public Map<String, AssetAndLiability> getAssetAndLiabilityIDToAssetAndLiability() {
+        loadAllAssetAndLiabilityData();
+        return this.assetAndLiabilityIDToAssetAndLiability;
+    }
+
 }

@@ -28,4 +28,8 @@ public class InMemoryAssetAndLiabilityDataAccessObject implements AssetAndLiabil
     public List<AssetAndLiability> getAllAssetAndLiabilities() {
         return new ArrayList<>(assetAndLiabilityIDToAssetAndLiability.values());
     }
+
+    public Map<String, AssetAndLiability> getAssetAndLiabilityIDToAssetAndLiability() {
+        return assetAndLiabilityIDToAssetAndLiability;
+    }
 }
