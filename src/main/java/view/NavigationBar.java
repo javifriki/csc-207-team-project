@@ -21,6 +21,8 @@ public class NavigationBar extends JPanel {
         JButton addAssetAndLiabilityButton = new JButton("Add Asset/Liability");
         JButton assetAndLiabilityListButton = new JButton("Asset/Liability List");
         JButton monthlyReportButton = new JButton("Monthly Report");
+        JButton currencyConverterButton = new JButton("Currency Converter");
+
 
         // Style buttons
         styleButton(addTransactionButton);
@@ -28,6 +30,8 @@ public class NavigationBar extends JPanel {
         styleButton(addAssetAndLiabilityButton);
         styleButton(assetAndLiabilityListButton);
         styleButton(monthlyReportButton);
+        styleButton(currencyConverterButton);
+
 
         // Add action listeners
         addTransactionButton.addActionListener(new ActionListener() {
@@ -70,11 +74,19 @@ public class NavigationBar extends JPanel {
             }
         });
 
+
+        currencyConverterButton.addActionListener(e -> {
+            viewManagerViewModel.setState("currencyConverter");
+            viewManagerViewModel.firePropertyChange("viewChange");
+        });
+
+
         add(addTransactionButton);
         add(monthlySummaryButton);
         add(addAssetAndLiabilityButton);
         add(assetAndLiabilityListButton);
         add(monthlyReportButton);
+        add(currencyConverterButton);
     }
 
     private void styleButton(JButton button) {

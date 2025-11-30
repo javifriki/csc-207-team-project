@@ -2,19 +2,33 @@ package app;
 
 import data_access.AccountDataAccessObject;
 import data_access.AssetAndLiabilityDataAccessObject;
+import data_access.MonthlyReportDataAccessObject;
 import interface_adaptor.ViewManagerViewModel;
+import interface_adaptor.add_account.AddAccountController;
+import interface_adaptor.add_account.AddAccountPresenter;
+import interface_adaptor.add_account.AddAccountViewModel;
 import interface_adaptor.add_asset_and_liability.AddAssetAndLiabilityController;
 import interface_adaptor.add_asset_and_liability.AddAssetAndLiabilityPresenter;
 import interface_adaptor.add_asset_and_liability.AddAssetAndLiabilityViewModel;
 import interface_adaptor.add_transaction.AddTransactionController;
 import interface_adaptor.add_transaction.AddTransactionPresenter;
 import interface_adaptor.add_transaction.AddTransactionViewModel;
+import interface_adaptor.monthly_report.MonthlyReportController;
+import interface_adaptor.monthly_report.MonthlyReportPresenter;
+import interface_adaptor.monthly_report.MonthlyReportViewModel;
 import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateController;
 import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRatePresenter;
 import interface_adaptor.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateViewModel;
 import interface_adaptor.monthly_summary.MonthlySummaryController;
 import interface_adaptor.monthly_summary.MonthlySummaryPresenter;
 import interface_adaptor.monthly_summary.MonthlySummaryViewModel;
+import interface_adaptor.currency_converter.CurrencyConverterController;
+import interface_adaptor.currency_converter.CurrencyConverterPresenter;
+import interface_adaptor.currency_converter.CurrencyConverterViewModel;
+import use_case.currency_converter.CurrencyConverterInteractor;
+import use_case.currency_converter.CurrencyRateFetcher;
+import use_case.account.AddAccountInteractor;
+import use_case.account.AddAccountOutputBoundary;
 import interface_adaptor.month_transactions.MonthTransactionsController;
 import use_case.add_asset_and_liability.AddAssetAndLiabilityInputBoundary;
 import use_case.add_asset_and_liability.AddAssetAndLiabilityInteractor;
@@ -24,6 +38,7 @@ import use_case.add_transaction.AddTransactionOutputBoundary;
 import use_case.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateInputBoundary;
 import use_case.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateInteractor;
 import use_case.asset_and_liability_apply_rate.AssetAndLiabilityApplyRateOutputBoundary;
+import use_case.monthly_report.MonthlyReportInteractor;
 import use_case.monthly_summary.MonthlySummaryInputBoundary;
 import use_case.monthly_summary.MonthlySummaryInteractor;
 import use_case.monthly_summary.MonthlySummaryOutputBoundary;
@@ -34,6 +49,7 @@ import view.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class AppBuilder {
     private final JPanel cardPanel = new JPanel();
@@ -49,6 +65,12 @@ public class AppBuilder {
     private AddAssetAndLiabilityViewModel addAssetAndLiabilityViewModel;
     private AssetAndLiabilityView assetAndLiabilityView;
     private AssetAndLiabilityApplyRateViewModel assetAndLiabilityApplyRateViewModel;
+    private AddAccountView addAccountView;
+    private AddAccountViewModel addAccountViewModel;
+    private MonthlyReportView monthlyReportView;
+    private MonthlyReportViewModel monthlyReportViewModel;
+    private CurrencyConverterView currencyConverterView;
+    private CurrencyConverterViewModel currencyConverterViewModel;
 
     final AccountDataAccessObject accountDataAccessObject = new AccountDataAccessObject("accounts.json");
     final AssetAndLiabilityDataAccessObject assetAndLiabilityDataAccessObject =
@@ -146,6 +168,87 @@ public class AppBuilder {
                 new AssetAndLiabilityApplyRateController(assetAndLiabilityApplyRateInteractor);
 
         assetAndLiabilityView.setAssetAndLiabilityApplyRateController(assetAndLiabilityApplyRateController);
+        return this;
+    }
+
+    public AppBuilder addAddAccountView() {
+        addAccountViewModel = new AddAccountViewModel();
+        addAccountView = new AddAccountView(addAccountViewModel);
+
+        ViewWithNavigation viewWithNav = new ViewWithNavigation(addAccountView, viewManagerViewModel);
+        this.cardPanel.add(viewWithNav, addAccountView.getViewName());
+
+        return this;
+    }
+
+    public AppBuilder addMonthlyReportView() {
+        monthlyReportViewModel = new MonthlyReportViewModel();
+        monthlyReportView = new MonthlyReportView(monthlyReportViewModel);
+
+        ViewWithNavigation viewWithNav = new ViewWithNavigation(monthlyReportView, viewManagerViewModel);
+        this.cardPanel.add(viewWithNav, monthlyReportView.getViewName());
+
+        return this;
+    }
+
+    public AppBuilder addAddAccountUseCase() {
+        final AddAccountOutputBoundary addAccountOutputPresenter = new AddAccountPresenter(addAccountViewModel);
+        final AddAccountInteractor addAccountInteractor = new AddAccountInteractor(accountDataAccessObject, addAccountOutputPresenter);
+
+        AddAccountController addAccountController = new AddAccountController(addAccountInteractor);
+        addAccountView.setAddAccountController(addAccountController);
+        return this;
+    }
+
+    public AppBuilder addMonthlyReportUseCase() {
+        MonthlyReportDataAccessObject monthlyReportDAO = new MonthlyReportDataAccessObject();
+        MonthlyReportPresenter presenter = new MonthlyReportPresenter(monthlyReportViewModel);
+        MonthlyReportInteractor interactor =
+                new MonthlyReportInteractor(monthlyReportDAO, presenter, accountDataAccessObject);
+        MonthlyReportController controller =
+                new MonthlyReportController(interactor);
+
+        monthlyReportView.setMonthlyReportController(controller);
+        return this;
+    }
+
+    public AppBuilder addCurrencyConverterView() {
+        currencyConverterViewModel = new CurrencyConverterViewModel();
+        currencyConverterView = new CurrencyConverterView(currencyConverterViewModel);
+
+
+        ViewWithNavigation viewWithNav =
+                new ViewWithNavigation(currencyConverterView, viewManagerViewModel);
+        this.cardPanel.add(viewWithNav, currencyConverterView.getViewName());
+
+
+        return this;
+    }
+
+
+
+
+    public AppBuilder addCurrencyConverterUseCase() {
+
+
+        CurrencyConverterPresenter presenter =
+                new CurrencyConverterPresenter(currencyConverterViewModel);
+
+
+        CurrencyRateFetcher fetcher = new CurrencyRateFetcher();
+
+
+        CurrencyConverterInteractor interactor =
+                new CurrencyConverterInteractor(presenter, fetcher);
+
+
+        CurrencyConverterController controller =
+                new CurrencyConverterController(interactor);
+
+
+        currencyConverterView.setCurrencyConverterController(controller);
+
+
         return this;
     }
 

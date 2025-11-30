@@ -13,17 +13,21 @@ public class MonthlyReportPresenter implements MonthlyReportOutputBoundary {
 
     @Override
     public void present(MonthlyReportOutputData outputData) {
+        MonthlyReportState state = viewModel.getState();
 
-        // Format text for UI
-        String title = "Monthly Report for " +
-                outputData.getYear() + "-" + outputData.getMonth();
+        state.setYear(outputData.getYear());
+        state.setMonth(outputData.getMonth());
+        state.setLineChartImage(outputData.getLineGraph());
+        state.setPieChartImage(outputData.getPieChart());
+        state.setErrorMessage(null);
 
-        // Store into ViewModel
-        viewModel.setTitle(title);
-        viewModel.setLineChartImage(outputData.getLineGraph());
-        viewModel.setPieChartImage(outputData.getPieChart());
-
+        viewModel.firePropertyChanged();
     }
 
+    @Override
+    public void presentError(String message) {
+        MonthlyReportState state = viewModel.getState();
+        state.setErrorMessage(message);
+        viewModel.firePropertyChanged();
+    }
 }
-

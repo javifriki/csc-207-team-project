@@ -14,6 +14,13 @@ public class Main {
                 .addAssetAndLiabilityUseCase()
                 .addAssetAndLiabilityApplyRateView()
                 .assetAndLiabilityApplyRateUseCase()
+                .addAddAccountView()
+                .addAddAccountUseCase()
+                .addMonthlyReportView()
+                .addMonthlyReportUseCase()
+                .addCurrencyConverterView()
+                .addCurrencyConverterUseCase()
+
                 .build();
 
         application.pack();
