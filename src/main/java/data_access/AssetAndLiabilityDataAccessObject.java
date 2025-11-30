@@ -36,6 +36,8 @@ public class AssetAndLiabilityDataAccessObject implements AssetAndLiabilityDataA
         loadAllAssetAndLiabilityData();
     }
 
+    public AssetAndLiabilityDataAccessObject() {}
+
     /*
     {
         "A0001": {

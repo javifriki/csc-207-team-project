@@ -25,18 +25,19 @@ public class NetWorthTableInteractorTest {
         }
     }
 
-    //helper method to create interactor that doesn't rely on actual DAO
+    // helper method to create interactor that doesn't rely on actual DAO or JSON file
     private NetWorthTableInteractor createInteractor(final List<AssetAndLiability> assetsAndLiabilities, MockPresenter presenter) {
         return new NetWorthTableInteractor(
-                new AssetAndLiabilityDataAccessObject("filename") {
+                new AssetAndLiabilityDataAccessObject() { // use no-arg constructor
                     @Override
                     public List<AssetAndLiability> getAllAssetAndLiabilities() {
-                        return assetsAndLiabilities;
+                        return assetsAndLiabilities; // return test data
                     }
                 },
                 presenter
         );
     }
+
 
     @Test
     public void testSeparateAssetAndLiability() {
