@@ -6,7 +6,7 @@
     <suppressErrors>true</suppressErrors>
     <option name="thirdPartyClasspath" />
     <option name="activeLocationIds">
-      <option value="my-style" />
+    <option value="my-style" />
     </option>
     <option name="locations">
       <list>
