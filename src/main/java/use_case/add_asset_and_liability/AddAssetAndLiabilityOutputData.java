@@ -2,35 +2,52 @@ package use_case.add_asset_and_liability;
 
 import entity.AssetAndLiability;
 
+import java.util.List;
+
 public class AddAssetAndLiabilityOutputData {
-    private String message;
     private AssetAndLiability.Type type;
-    private double assetAndLiabilityAmount;
+    private double initialAmount;
     private double interestRate;
+    private AssetAndLiability.RatePeriod ratePeriod;
+    private List<AssetAndLiability> assetAndLiabilityList;
+    private AssetAndLiability addedAssetAndLiability;
 
     // Transaction of $amount added successfully to $accountNumber. New balance is $newBalance. Additional messages: $message
 
-    public AddAssetAndLiabilityOutputData(String message, AssetAndLiability.Type type,
-                                          double assetAndLiabilityAmount, double interestRate) {
-        this.message = message;
+    public AddAssetAndLiabilityOutputData(AssetAndLiability.Type type,
+                                          double initialAmount, double interestRate,
+                                          AssetAndLiability.RatePeriod ratePeriod,
+                                          List<AssetAndLiability> assetAndLiabilityList,
+                                          AssetAndLiability assetAndLiability) {
         this.type = type;
-        this.assetAndLiabilityAmount = assetAndLiabilityAmount;
+        this.initialAmount = initialAmount;
         this.interestRate = interestRate;
-    }
-
-    public String getMessage() {
-        return this.message;
+        this.ratePeriod = ratePeriod;
+        this.assetAndLiabilityList = assetAndLiabilityList;
+        this.addedAssetAndLiability = assetAndLiability;
     }
 
     public AssetAndLiability.Type getType() {
         return type;
     }
 
-    public double getAssetAndLiabilityAmount() {
-        return assetAndLiabilityAmount;
+    public double getInitialAmount() {
+        return initialAmount;
     }
 
     public double getInterestRate() {
         return interestRate;
+    }
+
+    public AssetAndLiability.RatePeriod getRatePeriod() {
+        return ratePeriod;
+    }
+
+    public List<AssetAndLiability> getAssetAndLiabilityList() {
+        return assetAndLiabilityList;
+    }
+
+    public AssetAndLiability getAddedAssetAndLiability() {
+        return addedAssetAndLiability;
     }
 }

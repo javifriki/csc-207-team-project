@@ -24,18 +24,20 @@ public class NetWorthTableInteractor implements  NetWorthTableInputBoundary {
         List<AssetAndLiability> allAssets = new ArrayList<>();
         List<AssetAndLiability> allLiabilities = new ArrayList<>();
 
-        if (capitals == null) {throw new IllegalArgumentException("Invalid Capital Type");}
-
-        for (AssetAndLiability capital : capitals) {
-            switch (capital.getType()) {
-                case ASSET:
-                    allAssets.add(capital);
-                    totalAssets += capital.getAmount();
-                    break;
-                case LIABILITY:
-                    allLiabilities.add(capital);
-                    totalLiabilities += capital.getAmount();
-                    break;
+        if (capitals != null) {
+            for (AssetAndLiability capital : capitals) {
+                switch (capital.getType()) {
+                    case ASSET:
+                        allAssets.add(capital);
+                        totalAssets += capital.getCurrentAmount();
+                        break;
+                    case LIABILITY:
+                        allLiabilities.add(capital);
+                        totalLiabilities += capital.getCurrentAmount();
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Invalid capital type");
+                }
             }
         }
 

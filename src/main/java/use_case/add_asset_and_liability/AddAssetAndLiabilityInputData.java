@@ -5,36 +5,43 @@ import entity.AssetAndLiability;
 import java.time.LocalDate;
 
 public class AddAssetAndLiabilityInputData {
-    private final AssetAndLiability.Type type;
+    private final String type;
     private final String name;
     private final String ID;
     private final LocalDate dateCreated;
-    private final double amount;
+    private final double initialAmount;
     private final double interestRate;
+    private final String ratePeriod;
 
-    public AddAssetAndLiabilityInputData(String name, AssetAndLiability.Type type, String ID,
-                                         LocalDate dateCreated, double amount, double interestRate) {
+    public AddAssetAndLiabilityInputData(String name, String type, String ID,
+                                         LocalDate dateCreated, double initialAmount, double interestRate,
+                                         String ratePeriod) {
         this.name = name;
         this.type = type;
-        this.amount = amount;
+        this.initialAmount = initialAmount;
         this.dateCreated = dateCreated;
         this.ID = ID;
         this.interestRate = interestRate;
+        this.ratePeriod = ratePeriod;
     }
 
     // Getters
 
     public String getName() { return name; }
 
-    public AssetAndLiability.Type getType() { return type; }
+    public String getType() { return type; }
 
     public String getID() { return ID; }
 
-    public double getAmount() { return amount; }
+    public double getInitialAmount() { return initialAmount; }
 
     public double getInterestRate() { return interestRate; }
 
     public LocalDate getDateCreated() {
         return dateCreated;
+    }
+
+    public String getRatePeriod() {
+        return ratePeriod;
     }
 }
