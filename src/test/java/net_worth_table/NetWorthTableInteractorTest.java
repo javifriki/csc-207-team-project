@@ -40,14 +40,14 @@ public class NetWorthTableInteractorTest {
 
     @Test
     public void testSeparateAssetAndLiability() {
-        AssetAndLiability a1 = TestAssetAndLiabilityFactory.asset("stock", 2000, "AAA111");
-        AssetAndLiability a2 = TestAssetAndLiabilityFactory.asset("property", 100000.69, "ABC123");
-        AssetAndLiability a3 = TestAssetAndLiabilityFactory.asset("business", 350, "DEF456");
+        AssetAndLiability a1 = TestAssetAndLiabilityFactory.asset("stock", 2000, "AAA111", AssetAndLiability.RatePeriod.MONTHLY);
+        AssetAndLiability a2 = TestAssetAndLiabilityFactory.asset("property", 100000.69, "ABC123", AssetAndLiability.RatePeriod.MONTHLY);
+        AssetAndLiability a3 = TestAssetAndLiabilityFactory.asset("business", 350, "DEF456", AssetAndLiability.RatePeriod.MONTHLY);
 
-        AssetAndLiability l1 = TestAssetAndLiabilityFactory.liability("house", 100, "ASF123");
-        AssetAndLiability l2 = TestAssetAndLiabilityFactory.liability("debt", 4234.69, "WER234");
-        AssetAndLiability l3 = TestAssetAndLiabilityFactory.liability("tuition", 1235125, "GER221");
-        AssetAndLiability l4 = TestAssetAndLiabilityFactory.liability("big_house", 7658, "GET123");
+        AssetAndLiability l1 = TestAssetAndLiabilityFactory.liability("house", 100, "ASF123", AssetAndLiability.RatePeriod.MONTHLY);
+        AssetAndLiability l2 = TestAssetAndLiabilityFactory.liability("debt", 4234.69, "WER234", AssetAndLiability.RatePeriod.MONTHLY);
+        AssetAndLiability l3 = TestAssetAndLiabilityFactory.liability("tuition", 1235125, "GER221", AssetAndLiability.RatePeriod.MONTHLY);
+        AssetAndLiability l4 = TestAssetAndLiabilityFactory.liability("big_house", 7658, "GET123", AssetAndLiability.RatePeriod.MONTHLY);
 
         MockPresenter presenter = new MockPresenter();
         NetWorthTableInteractor interactor = createInteractor(List.of(a1, l1, a2, l2, l3, a3, l4), presenter);
