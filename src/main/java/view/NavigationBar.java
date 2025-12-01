@@ -21,6 +21,7 @@ public class NavigationBar extends JPanel {
         JButton addAssetAndLiabilityButton = new JButton("Add Asset/Liability");
         JButton assetAndLiabilityListButton = new JButton("Asset/Liability List");
         JButton addAccountButton = new JButton("Add Account");
+        JButton viewAccountsButton = new JButton("View Accounts");
         JButton monthlyReportButton = new JButton("Monthly Report");
         JButton currencyConverterButton = new JButton("Currency Converter");
         JButton netWorthTableButton = new JButton("Net Worth Table");
@@ -32,6 +33,7 @@ public class NavigationBar extends JPanel {
         styleButton(assetAndLiabilityListButton);
         styleButton(monthlyReportButton);
         styleButton(addAccountButton);
+        styleButton(viewAccountsButton);
         styleButton(monthlyReportButton);
         styleButton(currencyConverterButton);
         styleButton(netWorthTableButton);
@@ -77,6 +79,14 @@ public class NavigationBar extends JPanel {
             }
         });
 
+        viewAccountsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewManagerViewModel.setState("viewAccounts");
+                viewManagerViewModel.firePropertyChange("viewChange");
+            }
+        });
+
         monthlyReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -100,6 +110,7 @@ public class NavigationBar extends JPanel {
         add(addAssetAndLiabilityButton);
         add(assetAndLiabilityListButton);
         add(addAccountButton);
+        add(viewAccountsButton);
         add(monthlyReportButton);
         add(currencyConverterButton);
         add(netWorthTableButton);
