@@ -18,7 +18,7 @@ public class ViewWithNavigation extends JPanel {
 
         setLayout(new BorderLayout());
         add(viewPanel, BorderLayout.CENTER);
-        add(navigationBar, BorderLayout.SOUTH);
+        add(navigationBar, BorderLayout.WEST);
     }
 
     public JPanel getViewPanel() {
