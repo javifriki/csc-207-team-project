@@ -37,9 +37,11 @@ public class AssetAndLiability {
     }
 
     public void applyRate (int num) {
+        currentAmount = initialAmount;
         for (int i = 0; i < num; i++) {
             currentAmount *= (1 + interestRate);
         }
+        currentAmount = (Math.round(currentAmount * 100.0)) / 100.0;
     }
 
     // Getters

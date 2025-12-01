@@ -44,13 +44,13 @@ public class AddAssetAndLiabilityInteractor implements AddAssetAndLiabilityInput
         final double interestRate =  addAssetAndLiabilityInputData.getInterestRate();
         final AssetAndLiability.RatePeriod ratePeriod = assetAndLiabilityRatePeriodMap.get(addAssetAndLiabilityInputData.getRatePeriod());
 
-        if (name == null || name.isEmpty()) {
+        if (name.isEmpty()) {
             errorMessage += "No name provided";
         }
 
         Map<String, AssetAndLiability> assetAndLiabilityIDToAssetAndLiability = assetAndLiabilityDataAccessObject.getAssetAndLiabilityIDToAssetAndLiability();
 
-        if (ID == null || ID.isEmpty()) {
+        if (ID.isEmpty()) {
             errorMessage += "\nNo ID provided";
         } else if (assetAndLiabilityIDToAssetAndLiability.containsKey(ID)) {
             errorMessage += "\nID already in use, choose another ID.";

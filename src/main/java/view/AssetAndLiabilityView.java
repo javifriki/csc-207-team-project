@@ -173,6 +173,7 @@ public class AssetAndLiabilityView extends JPanel implements PropertyChangeListe
         this.add(namePanel);
         this.add(IDPanel);
         this.add(typePanel);
+        this.add(dateCreatedPanel);
         this.add(initialAmountPanel);
         this.add(currentAmountPanel);
         this.add(interestRatePanel);
