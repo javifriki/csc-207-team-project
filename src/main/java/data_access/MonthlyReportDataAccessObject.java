@@ -10,6 +10,37 @@ import java.util.List;
 public class MonthlyReportDataAccessObject {
 
     private static final JSONObject yearTransactions = new JSONObject();
+    //{
+    //  "2024": {
+    //            "1": {
+    //                     "graph_data":  {
+    //                                       "1": 0.0
+    //                                       "2": 0.0
+    //                                          ...
+    //                                       "31": 0.0
+    //                                          },
+    //                     "category_totals":  {
+    //                                          "DINING": 0.0,
+    //                                          "GROCERIES": 0.0,
+    //                                              ...
+    //                                          "HEALTHCARE": 0.0
+    //                                          }
+    //                  },
+    //             "2": {.....
+    //                  }
+    //              ...
+    //             "12": {
+    //                      ...
+    //                    }
+    //
+    //            },
+    //  "2025": {
+    //           ...
+    //           },
+    //  "2026": {
+    //          ...
+    //          }
+    //}
 
     private static final List<String> PIE_CATEGORIES = List.of(
             "DINING",

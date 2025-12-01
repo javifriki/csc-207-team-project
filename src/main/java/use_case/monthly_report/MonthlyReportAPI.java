@@ -36,6 +36,7 @@ public class MonthlyReportAPI {
 
         int daysInMonth = YearMonth.of(year, month).lengthOfMonth();
 
+        // Calculate Balances
         double openingBalance = MonthlyReportDataAccessObject.getOpeningBalance(year, month);
         double cumulative = openingBalance;
 
@@ -47,6 +48,50 @@ public class MonthlyReportAPI {
             labels.add(key);
             values.add(cumulative);
         }
+
+        // Line Graph API Request Format
+        // {
+        //  "type": "line",
+        //  "data": {
+        //    "labels": ["1", "2", ..., "31"],
+        //    "datasets": [
+        //      {
+        //        "label": "Current Balance",
+        //        "data": [0.0, ... 0.0],
+        //        "borderColor": "black",
+        //        "fill": false
+        //      }
+        //    ]
+        //  },
+        //  "options": {
+        //    "title": {
+        //      "display": true,
+        //      "text": "Balance Tracker for year-month"
+        //    },
+        //    "legend": {
+        //      "display": false
+        //    },
+        //    "scales": {
+        //      "yAxes": [
+        //        {
+        //          "ticks": { "beginAtZero": true },
+        //          "scaleLabel": {
+        //            "display": true,
+        //            "labelString": "Current Balance"
+        //          }
+        //        }
+        //      ],
+        //      "xAxes": [
+        //        {
+        //          "scaleLabel": {
+        //            "display": true,
+        //            "labelString": "Day of Month"
+        //          }
+        //        }
+        //      ]
+        //    }
+        //  }
+        //}
 
         String title = "Balance Tracker for " + year + "-" + month;
 
@@ -134,6 +179,7 @@ public class MonthlyReportAPI {
 //            values.add(String.valueOf(value));
 //        }
 
+        // Calculate percentages
         double total = 0.0;
         for (Iterator<String> it = pieData.keys(); it.hasNext(); ) {
             String key = it.next();
@@ -149,62 +195,82 @@ public class MonthlyReportAPI {
             if (total == 0.0) {
                 percent = 0.0;
             } else {
-                // round to nearest integer percent
                 percent = Math.round(amount * 100.0 / total);
             }
 
             labels.add(key);
-            values.add(percent);   // these are now 0-decimal values like 40, 60
+            values.add(percent);
         }
 
+        // Pie Chart API Request Format
+        // {
+        //  "type": "pie",
+        //  "plugins": ["datalabels"],
+        //  "data": {
+        //    "labels": ["DINING", "GROCERIES", ..., "HEALTHCARE"],
+        //    "datasets": [
+        //      {
+        //        "data": [40, ... , 0]
+        //      }
+        //    ]
+        //  },
+        //  "options": {
+        //    "title": {
+        //      "display": true,
+        //      "text": "Spending Categories YEAR-MONTH"
+        //    },
+        //    "legend": {
+        //      "display": true,
+        //      "position": "top"
+        //    },
+        //    "plugins": {
+        //      "datalabels": {
+        //        "display": true,
+        //        "color": "white",
+        //        "font": { "size": 14 },
+        //        "formatter": "function(value){ if(value === 0) return ''; return value + '%'; }"
+        //      }
+        //    }
+        //  }
+        //}
 
         String title = "Spending Categories " + year + "-" + month;
 
         String config = new JSONObject()
                 .put("type", "pie")
-                // enable datalabels plugin globally
                 .put("plugins", new JSONArray().put("datalabels"))
                 .put("data", new JSONObject()
                         .put("labels", labels)
                         .put("datasets", new JSONArray()
                                 .put(new JSONObject()
-                                        .put("data", values)   // List<Double> of percentages
+                                        .put("data", values)
                                 )
                         )
                 )
                 .put("options", new JSONObject()
-                        // Chart title
                         .put("title", new JSONObject()
                                 .put("display", true)
                                 .put("text", title)
                         )
-                        // Legend (you can keep or tweak this)
                         .put("legend", new JSONObject()
                                 .put("display", true)
                                 .put("position", "top")
                         )
-                        // Plugin configuration
                         .put("plugins", new JSONObject()
                                 .put("datalabels", new JSONObject()
                                         .put("display", true)
                                         .put("color", "white")
                                         .put("font", new JSONObject().put("size", 14))
-                                        // JS function as a STRING
-                                        // - hide label if value === 0
-                                        // - round to 0 decimals and add %
                                         .put("formatter",
                                                 "function(value){ " +
                                                         "  if (value === 0) return ''; " +
-                                                        "  return Math.round(value) + '%'; " +
+                                                        "  return value + '%'; " +
                                                         "}"
                                         )
                                 )
                         )
                 )
                 .toString();
-
-
-
 
         String encoded = URLEncoder.encode(config, StandardCharsets.UTF_8);
 
