@@ -28,6 +28,9 @@ import interface_adaptor.currency_converter.CurrencyConverterViewModel;
 import interface_adaptor.net_worth_table.NetWorthTableController;
 import interface_adaptor.net_worth_table.NetWorthTablePresenter;
 import interface_adaptor.net_worth_table.NetWorthTableViewModel;
+import interface_adaptor.view_accounts.ViewAccountsController;
+import interface_adaptor.view_accounts.ViewAccountsPresenter;
+import interface_adaptor.view_accounts.ViewAccountsViewModel;
 import use_case.currency_converter.CurrencyConverterInteractor;
 import use_case.currency_converter.CurrencyRateFetcher;
 import use_case.account.AddAccountInteractor;
@@ -50,6 +53,9 @@ import use_case.month_transactions.MonthTransactionsInteractor;
 import use_case.month_transactions.MonthTransactionsOutputBoundary;
 import use_case.net_worth_table.NetWorthTableInteractor;
 import use_case.net_worth_table.NetWorthTableOutputBoundary;
+import use_case.view_accounts.ViewAccountsInputBoundary;
+import use_case.view_accounts.ViewAccountsInteractor;
+import use_case.view_accounts.ViewAccountsOutputBoundary;
 import view.*;
 
 import javax.swing.*;
@@ -78,6 +84,8 @@ public class AppBuilder {
     private CurrencyConverterViewModel currencyConverterViewModel;
     private NetWorthTableView netWorthTableView;
     private NetWorthTableViewModel netWorthTableViewModel;
+    private ViewAccountsView viewAccountsView;
+    private ViewAccountsViewModel viewAccountsViewModel;
 
 
     final AccountDataAccessObject accountDataAccessObject = new AccountDataAccessObject("accounts.json");
@@ -276,6 +284,26 @@ public class AppBuilder {
 
         NetWorthTableController netWorthTableController = new NetWorthTableController(netWorthTableInteractor);
         this.netWorthTableView.setNetWorthTableController(netWorthTableController);
+
+        return this;
+    }
+
+    public AppBuilder addViewAccountsView() {
+        this.viewAccountsViewModel = new ViewAccountsViewModel();
+        this.viewAccountsView = new ViewAccountsView(this.viewAccountsViewModel);
+
+        ViewWithNavigation viewWithNav = new ViewWithNavigation(this.viewAccountsView, viewManagerViewModel);
+        this.cardPanel.add(viewWithNav, this.viewAccountsView.getViewName());
+
+        return this;
+    }
+
+    public AppBuilder addViewAccountsUseCase() {
+        final ViewAccountsOutputBoundary viewAccountsPresenter = new ViewAccountsPresenter(this.viewAccountsViewModel);
+        final ViewAccountsInputBoundary viewAccountsInteractor = new ViewAccountsInteractor(accountDataAccessObject, viewAccountsPresenter);
+
+        ViewAccountsController viewAccountsController = new ViewAccountsController(viewAccountsInteractor);
+        this.viewAccountsView.setViewAccountsController(viewAccountsController);
 
         return this;
     }

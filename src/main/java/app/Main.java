@@ -16,6 +16,8 @@ public class Main {
                 .assetAndLiabilityApplyRateUseCase()
                 .addAddAccountView()
                 .addAddAccountUseCase()
+                .addViewAccountsView()
+                .addViewAccountsUseCase()
                 .addMonthlyReportView()
                 .addMonthlyReportUseCase()
                 .addCurrencyConverterView()
