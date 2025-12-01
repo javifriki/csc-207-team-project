@@ -15,6 +15,7 @@ public class NetWorthTableView extends JPanel {
     private final NetWorthTableViewModel netWorthTableViewModel;
     private final JTable netWorthTable;
     private final JLabel assetTotal, liabilityTotal, netWorthTotal;
+    private final JButton refreshButton;
     EmptyBorder padding = new EmptyBorder(30, 30, 30, 30);
 
     public NetWorthTableView(NetWorthTableViewModel netWorthTableViewModel) {
@@ -22,6 +23,9 @@ public class NetWorthTableView extends JPanel {
 
         NetWorthTableTableModel tableModel = new NetWorthTableTableModel(netWorthTableViewModel.getState());
         this.netWorthTable = new JTable(tableModel);
+        refreshButton = new JButton("Refresh Data");
+        refreshButton.addActionListener(e -> refreshData());
+        refreshButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -46,10 +50,15 @@ public class NetWorthTableView extends JPanel {
         netWorth.add(netWorthLabel);
         netWorth.add(netWorthTotal);
 
+        JPanel bottom = new JPanel();
+        bottom.setLayout(new BoxLayout(bottom, BoxLayout.Y_AXIS));
+        bottom.add(asset);
+        bottom.add(liability);
+        bottom.add(netWorth);
+        bottom.add(refreshButton);
+
         this.add(table);
-        this.add(asset);
-        this.add(liability);
-        this.add(netWorth);
+        this.add(bottom);
     }
 
     public void setNetWorthTableController(NetWorthTableController netWorthTableController) {
