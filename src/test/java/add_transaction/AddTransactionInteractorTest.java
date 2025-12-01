@@ -181,4 +181,37 @@ public class AddTransactionInteractorTest {
         assertEquals("AWER123", accountDataAccessObject.getAccount("AWER123").getAccountTransactions().get(0).getAccountNumber());
     }
 
+    @Test
+    void creditNegativeBalanceTest() {
+        AddTransactionInputData addTransactionInputData = new AddTransactionInputData(
+                1000.0,
+                "AWER123",
+                Transaction.TransactionType.EXPENSE,
+                Transaction.TransactionCategory.GROCERIES,
+                LocalDate.of(2025, 11, 17)
+        );
+
+        AccountDataAccessInterface accountDataAccessObject = new InMemoryAccountDataAccessObject();
+        Account account = new Account("AWER123", Account.AccountType.CREDIT, new ArrayList<>(), 500.0);
+        accountDataAccessObject.saveAccount(account);
+
+        AddTransactionOutputBoundary addTransactionPresenter = new AddTransactionOutputBoundary() {
+            @Override
+            public void prepareTransactionSuccessView(AddTransactionOutputData addTransactionOutputData) {
+                assertEquals(-500.0, addTransactionOutputData.getNewBalance());
+            }
+
+            @Override
+            public void prepareTransactionFailView(String errorMessage) {
+                fail("CREDIT account should not fail for insufficient funds.");
+            }
+        };
+
+        AddTransactionInteractor addTransactionInteractor = new AddTransactionInteractor(accountDataAccessObject, addTransactionPresenter);
+        addTransactionInteractor.execute(addTransactionInputData);
+
+        // Check the DAO has stored the account and the transaction within it
+        assertEquals(-500.0, accountDataAccessObject.getAccount("AWER123").getAccountBalance());
+    }
+
 }
