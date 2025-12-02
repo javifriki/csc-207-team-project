@@ -6,6 +6,6 @@ package use_case.monthly_report;
  */
 
 public interface MonthlyReportOutputBoundary {
-    void present(MonthlyReportOutputData outputData);
+    void present(MonthlyReportResponseModel outputData);
     void presentError(String s);
 }

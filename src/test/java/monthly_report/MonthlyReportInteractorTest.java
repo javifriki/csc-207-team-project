@@ -7,7 +7,7 @@ import use_case.account.AccountDataAccessInterface;
 import use_case.monthly_report.MonthlyReportInputData;
 import use_case.monthly_report.MonthlyReportInteractor;
 import use_case.monthly_report.MonthlyReportOutputBoundary;
-import use_case.monthly_report.MonthlyReportOutputData;
+import use_case.monthly_report.MonthlyReportResponseModel;
 import data_access.MonthlyReportDataAccessObject;
 
 import java.awt.image.BufferedImage;
@@ -54,11 +54,11 @@ class MonthlyReportInteractorTest {
 
     static class InMemoryMonthlyReportPresenter implements MonthlyReportOutputBoundary {
 
-        MonthlyReportOutputData lastOutput;
+        MonthlyReportResponseModel lastOutput;
         String lastError;
 
         @Override
-        public void present(MonthlyReportOutputData outputData) {
+        public void present(MonthlyReportResponseModel outputData) {
             this.lastOutput = outputData;
         }
 
@@ -106,7 +106,7 @@ class MonthlyReportInteractorTest {
         assertNull(presenter.lastError, "There should be no error message.");
         assertNotNull(presenter.lastOutput, "Presenter should receive an output data object.");
 
-        MonthlyReportOutputData out = presenter.lastOutput;
+        MonthlyReportResponseModel out = presenter.lastOutput;
 
         assertEquals(2025, out.getYear());
         assertEquals(1, out.getMonth());
