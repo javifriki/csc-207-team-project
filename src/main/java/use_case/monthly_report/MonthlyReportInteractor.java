@@ -37,8 +37,8 @@ public class MonthlyReportInteractor implements MonthlyReportInputBoundary {
             BufferedImage line = MonthlyReportAPI.generateLineChart(year, month);
             BufferedImage pie  = MonthlyReportAPI.generatePieChart(year, month);
 
-            MonthlyReportOutputData outputData =
-                    new MonthlyReportOutputData(year, month, line, pie);
+            MonthlyReportResponseModel outputData =
+                    new MonthlyReportResponseModel(year, month, line, pie);
 
             presenter.present(outputData);
 
