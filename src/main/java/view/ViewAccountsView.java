@@ -2,14 +2,19 @@ package view;
 
 import entity.Account;
 import interface_adaptor.view_accounts.ViewAccountsController;
+import interface_adaptor.view_accounts.ViewAccountsState;
 import interface_adaptor.view_accounts.ViewAccountsTableModel;
 import interface_adaptor.view_accounts.ViewAccountsViewModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class ViewAccountsView extends JPanel {
+public class ViewAccountsView extends JPanel implements PropertyChangeListener {
     private ViewAccountsController viewAccountsController;
     private final ViewAccountsViewModel viewAccountsViewModel;
     private final JTable accountsTable;
@@ -18,6 +23,7 @@ public class ViewAccountsView extends JPanel {
 
     public ViewAccountsView(ViewAccountsViewModel viewAccountsViewModel) {
         this.viewAccountsViewModel = viewAccountsViewModel;
+        this.viewAccountsViewModel.addPropertyChangeListener(this);
 
         ViewAccountsTableModel tableModel = new ViewAccountsTableModel(viewAccountsViewModel.getState());
         this.accountsTable = new JTable(tableModel);
@@ -38,25 +44,36 @@ public class ViewAccountsView extends JPanel {
         totalPanel.add(totalBalanceLabel);
         totalPanel.setBorder(padding);
         add(totalPanel);
+
+        JButton refreshButton = new JButton("Refresh Data");
+        refreshButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewAccountsController.execute();
+            }
+        });
+        add(refreshButton);
     }
 
     public void setViewAccountsController(ViewAccountsController viewAccountsController) {
         this.viewAccountsController = viewAccountsController;
         if (this.viewAccountsController != null) {
-            refreshData();
+            viewAccountsController.execute();
         }
     }
 
-    public void refreshData() {
-        if (viewAccountsController != null) {
-            viewAccountsController.execute();
-
-            ViewAccountsTableModel newModel = new ViewAccountsTableModel(viewAccountsViewModel.getState());
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("accountsUpdated")) {
+            ViewAccountsState state = (ViewAccountsState) evt.getNewValue();
+            
+            ViewAccountsTableModel newModel = new ViewAccountsTableModel(state);
             accountsTable.setModel(newModel);
 
             // Calculate total balance
             double totalBalance = 0.0;
-            for (Account account : viewAccountsViewModel.getState().getAccounts()) {
+            for (Account account : state.getAccounts()) {
                 totalBalance += account.getAccountBalance();
             }
 
